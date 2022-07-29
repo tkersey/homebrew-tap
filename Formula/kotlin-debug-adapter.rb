@@ -9,10 +9,21 @@ class KotlinDebugAdapter < Formula
   depends_on "openjdk"
 
   def install
-    system "./gradlew", ":adapter:installDist"
+    ENV["JAVA_HOME"] = Language::Java.java_home
+    #  Remove Windows files
+    rm "gradlew.bat"
+
+    system "gradle", ":adapter:installDist"
+
+    libexec.install Dir["adapter/build/install/adapter/*"]
+
+    (bin/"kotlin-debug-adapter").write_env_script libexec/"bin/kotlin-debug-adapter",
+      Language::Java.overridable_java_home_env
   end
 
   test do
-    system "true"
+    output = pipe_output("#{bin}/kotlin-debug-adapter", "", 0)
+
+    assert_match(/^Content-Length: \d+/i, output)
   end
 end
