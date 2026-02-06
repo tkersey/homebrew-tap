@@ -1,6 +1,6 @@
 class Bz < Formula
   desc "Zig implementation of the br protocol"
-  homepage "https://github.com/tkersey/bz"
+  homepage "https://github.com/tkersey/homebrew-tap"
   url "https://github.com/tkersey/bz.git",
       using:    :git,
       revision: "2e12026fb4c041142c173887d353e35067c4ef33"
