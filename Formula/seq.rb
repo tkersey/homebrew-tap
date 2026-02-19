@@ -2,7 +2,6 @@ class Seq < Formula
   desc "Zig CLI for mining Codex session and memory artifacts"
   homepage "https://github.com/tkersey/seq"
   url "https://github.com/tkersey/seq/archive/refs/tags/v0.1.0.tar.gz"
-  version "0.1.0"
   sha256 "9148d7dbcc28457db3f4fd65aecac86668f3ea90453cbf63cdcb7343d70acdc3"
   license "MIT"
 
