@@ -3,8 +3,8 @@ class Lift < Formula
   homepage "https://github.com/tkersey/lift"
   url "https://github.com/tkersey/lift.git",
       using:    :git,
-      revision: "f177725db7358032d0085027ef40329315daf12d"
-  version "f177725"
+      revision: "d75ff4241608fedd6d87234831ab8933968dbf99"
+  version "0.1.0"
   head "https://github.com/tkersey/lift.git", branch: "main"
 
   depends_on "zig" => :build
