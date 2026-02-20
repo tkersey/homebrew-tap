@@ -1,17 +1,18 @@
 class Seq < Formula
   desc "Zig CLI for mining Codex session and memory artifacts"
-  homepage "https://github.com/tkersey/seq"
-  url "https://github.com/tkersey/seq/archive/refs/tags/v0.1.2.tar.gz"
-  sha256 "82ef36f7adc59184d4cc8b078c3353d9eacfe8aba6855bdc0b826e991b645cd5"
+  homepage "https://github.com/tkersey/skills-zig"
+  url "https://github.com/tkersey/skills-zig.git", using: :git, tag: "seq-v0.2.1"
+  version "0.2.1"
   license "MIT"
 
   depends_on "zig" => :build
 
   def install
-    system "zig", "build", "-Doptimize=ReleaseFast", "--prefix", prefix
+    system "zig", "build", "build-seq", "-Doptimize=ReleaseFast"
+    bin.install "zig-out/bin/seq"
   end
 
   test do
-    assert_match "seq bootstrap ready", shell_output("#{bin}/seq --help")
+    assert_match "skills-rank", shell_output("#{bin}/seq --help")
   end
 end
