@@ -3,8 +3,8 @@ class Cas < Formula
   homepage "https://github.com/tkersey/cas"
   url "https://github.com/tkersey/cas.git",
       using:    :git,
-      revision: "5c6ff3caeb1d0095389f88d41a6d02e272756a29"
-  version "5c6ff3c"
+      revision: "e96693d260abbe7fbceb90b5e88271e63c07a3c5"
+  version "e96693d"
   head "https://github.com/tkersey/cas.git", branch: "main"
 
   depends_on "zig" => :build
