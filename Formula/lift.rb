@@ -2,9 +2,9 @@ class Lift < Formula
   desc "Zig CLI helpers for performance measurement workflows"
   homepage "https://github.com/tkersey/skills-zig"
   url "https://github.com/tkersey/skills-zig.git",
-      using: :git,
-      tag:   "lift-v0.2.1"
-  version "0.2.1"
+      using:    :git,
+      tag:      "lift-v0.2.2",
+      revision: "b16bfd022de0ef306fc837d5a1ffaf26c383e4d7"
   head "https://github.com/tkersey/skills-zig.git", branch: "main"
 
   depends_on "zig" => :build
