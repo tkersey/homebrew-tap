@@ -2,8 +2,8 @@ class Puff < Formula
   desc "Zig CLI for Codex cloud task orchestration"
   homepage "https://github.com/tkersey/skills-zig"
   url "https://github.com/tkersey/skills-zig.git",
-      using: :git,
-      tag:   "puff-v0.1.1",
+      using:    :git,
+      tag:      "puff-v0.1.1",
       revision: "4c3bd1a515e7dadf00b5cf4df6044780ebd98230"
   license "MIT"
 
