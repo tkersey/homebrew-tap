@@ -1,8 +1,8 @@
 class Seq < Formula
   desc "Zig CLI for mining Codex session and memory artifacts"
   homepage "https://github.com/tkersey/skills-zig"
-  url "https://github.com/tkersey/skills-zig.git", using: :git, tag: "seq-v0.2.1"
-  version "0.2.1"
+  url "https://github.com/tkersey/skills-zig.git", using: :git, tag: "seq-v0.2.2"
+  version "0.2.2"
   license "MIT"
 
   depends_on "zig" => :build

@@ -3,8 +3,8 @@ class Cas < Formula
   homepage "https://github.com/tkersey/skills-zig"
   url "https://github.com/tkersey/skills-zig.git",
       using:    :git,
-      tag:      "cas-v0.2.2",
-      revision: "aea09894272b581a69e1c3dfe3d26585c2d2dc57"
+      tag:      "cas-v0.2.3",
+      revision: "1983dbfa8b013b571a9a185ffdbb0c691979e500"
   head "https://github.com/tkersey/skills-zig.git", branch: "main"
 
   depends_on "zig" => :build
