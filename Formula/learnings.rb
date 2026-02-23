@@ -3,8 +3,8 @@ class Learnings < Formula
   homepage "https://github.com/tkersey/skills-zig"
   url "https://github.com/tkersey/skills-zig.git",
       using:    :git,
-      tag:      "learnings-v0.1.2",
-      revision: "1983dbfa8b013b571a9a185ffdbb0c691979e500"
+      tag:      "learnings-v0.1.3",
+      revision: "3327b5f706c6391fa426ed2a6458ef8ef1a950a0"
   license "MIT"
 
   depends_on "zig" => :build
