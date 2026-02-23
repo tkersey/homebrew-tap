@@ -1,17 +1,23 @@
 class Lift < Formula
   desc "Zig CLI helpers for performance measurement workflows"
   homepage "https://github.com/tkersey/skills-zig"
-  url "https://github.com/tkersey/skills-zig.git",
-      using:    :git,
-      tag:      "lift-v0.2.4",
-      revision: "3327b5f706c6391fa426ed2a6458ef8ef1a950a0"
-  head "https://github.com/tkersey/skills-zig.git", branch: "main"
+  version "0.2.5"
 
-  depends_on "zig" => :build
+  on_macos do
+    depends_on arch: :arm64
+    url "https://github.com/tkersey/skills-zig/releases/download/lift-v#{version}/lift-v#{version}-darwin-arm64.tar.gz"
+    sha256 "310479cc3bf2469ab25a32477fac011410c401ba373aa3e6b5b6dab5b6ea9e26"
+  end
+
+  on_linux do
+    depends_on arch: :x86_64
+    url "https://github.com/tkersey/skills-zig/releases/download/lift-v#{version}/lift-v#{version}-linux-x86_64.tar.gz"
+    sha256 "da2a755d81cc99feefdd039f006f503bf2739c1d80414408d90dd67f2b6ef130"
+  end
 
   def install
-    system "zig", "build", "build-lift", "-Doptimize=ReleaseFast"
-    bin.install "zig-out/bin/bench_stats", "zig-out/bin/perf_report"
+    bin.install "lift-bench-stats" => "bench_stats"
+    bin.install "lift-perf-report" => "perf_report"
   end
 
   test do

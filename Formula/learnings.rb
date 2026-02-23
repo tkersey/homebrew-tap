@@ -1,18 +1,23 @@
 class Learnings < Formula
   desc "Zig CLIs for Codex learnings capture workflows"
   homepage "https://github.com/tkersey/skills-zig"
-  url "https://github.com/tkersey/skills-zig.git",
-      using:    :git,
-      tag:      "learnings-v0.1.3",
-      revision: "3327b5f706c6391fa426ed2a6458ef8ef1a950a0"
+  version "0.1.4"
   license "MIT"
 
-  depends_on "zig" => :build
+  on_macos do
+    depends_on arch: :arm64
+    url "https://github.com/tkersey/skills-zig/releases/download/learnings-v#{version}/learnings-v#{version}-darwin-arm64.tar.gz"
+    sha256 "3b49f8a5acf41392c9a166770e1b4e4b2773096bc2febd644287ffa35fcae58f"
+  end
+
+  on_linux do
+    depends_on arch: :x86_64
+    url "https://github.com/tkersey/skills-zig/releases/download/learnings-v#{version}/learnings-v#{version}-linux-x86_64.tar.gz"
+    sha256 "b48838db36ca146fd4507075ef8d58e5740e46991e42e9a59c3d90f2a4b5a44b"
+  end
 
   def install
-    bin.mkpath
-    system "zig", "build", "build-learnings", "-Doptimize=ReleaseFast"
-    bin.install "zig-out/bin/learnings", "zig-out/bin/append_learning"
+    bin.install "learnings", "append_learning"
   end
 
   test do

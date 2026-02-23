@@ -1,18 +1,23 @@
 class Cron < Formula
   desc "Zig CLI for Codex automation schedule management"
   homepage "https://github.com/tkersey/skills-zig"
-  url "https://github.com/tkersey/skills-zig.git",
-      using:    :git,
-      tag:      "cron-v0.1.3",
-      revision: "3327b5f706c6391fa426ed2a6458ef8ef1a950a0"
+  version "0.1.4"
   license "MIT"
 
-  depends_on "zig" => :build
+  on_macos do
+    depends_on arch: :arm64
+    url "https://github.com/tkersey/skills-zig/releases/download/cron-v#{version}/cron-v#{version}-darwin-arm64.tar.gz"
+    sha256 "8ea81cf0e2ece23a53d93b70ccf347d98a9a4fe9fcaca153929c2f81bc3ec21d"
+  end
+
+  on_linux do
+    depends_on arch: :x86_64
+    url "https://github.com/tkersey/skills-zig/releases/download/cron-v#{version}/cron-v#{version}-linux-x86_64.tar.gz"
+    sha256 "f445232ae90f94b04dd503feee12ddb3aa1b7eebb9280be6f8347aa4f2ec404d"
+  end
 
   def install
-    bin.mkpath
-    system "zig", "build", "build-cron", "-Doptimize=ReleaseFast"
-    bin.install "zig-out/bin/cron"
+    bin.install "cron"
   end
 
   test do
