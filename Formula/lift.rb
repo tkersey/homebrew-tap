@@ -1,18 +1,18 @@
 class Lift < Formula
   desc "Zig CLI helpers for performance measurement workflows"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.2.5"
+  version "0.2.6"
 
   on_macos do
     depends_on arch: :arm64
     url "https://github.com/tkersey/skills-zig/releases/download/lift-v#{version}/lift-v#{version}-darwin-arm64.tar.gz"
-    sha256 "310479cc3bf2469ab25a32477fac011410c401ba373aa3e6b5b6dab5b6ea9e26"
+    sha256 "9db1f5d00397ee605993e09191ed40c711f6c6c74f996bf54593f64e5445b3b8"
   end
 
   on_linux do
     depends_on arch: :x86_64
     url "https://github.com/tkersey/skills-zig/releases/download/lift-v#{version}/lift-v#{version}-linux-x86_64.tar.gz"
-    sha256 "da2a755d81cc99feefdd039f006f503bf2739c1d80414408d90dd67f2b6ef130"
+    sha256 "f86b2de6b80814ea72a7f24ca9427019745cb5f9b78251e03d538c0bef88d266"
   end
 
   def install
