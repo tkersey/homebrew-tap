@@ -1,7 +1,7 @@
 class Seq < Formula
   desc "Zig CLI for mining Codex session and memory artifacts"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.2.6"
+  version "0.2.7"
   license "MIT"
 
   on_macos do
