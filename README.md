@@ -27,3 +27,9 @@ Or `brew tap tkersey/tap` and then `brew install <formula>`.
 - Source: `https://github.com/tkersey/skills-zig` tag `st-v<version>` release assets; update both platform `sha256` values in `Formula/st.rb` after release publish.
 - Install (public): `brew tap tkersey/tap` then `brew install st` (or `brew install tkersey/tap/st`).
 - Validate with `brew style Formula/st.rb`, `brew audit --strict tkersey/tap/st`, and `brew test tkersey/tap/st`.
+
+## Mesh Release Checklist
+
+- Source: `https://github.com/tkersey/skills-zig` tag `mesh-v<version>` release assets; update both platform `sha256` values in `Formula/mesh.rb` after release publish.
+- Install (public): `brew tap tkersey/tap` then `brew install mesh` (or `brew install tkersey/tap/mesh`).
+- Validate with `brew style Formula/mesh.rb`, `brew audit --strict tkersey/tap/mesh`, and `brew test tkersey/tap/mesh`.
