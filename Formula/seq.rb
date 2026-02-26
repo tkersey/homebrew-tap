@@ -4,13 +4,11 @@ class Seq < Formula
   version "0.2.7"
   license "MIT"
 
-  on_macos do
+  if OS.mac?
     depends_on arch: :arm64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-darwin-arm64.tar.gz"
     sha256 "ef4dae743a8f65762ce1b2068c46e23c8c40488a82c4fac5533615e17cc1e932"
-  end
-
-  on_linux do
+  else
     depends_on arch: :x86_64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-linux-x86_64.tar.gz"
     sha256 "a65e58d76f571ca8830239db783c5700dc21870562ce775a276156cabad42177"
