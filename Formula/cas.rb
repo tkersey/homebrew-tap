@@ -3,16 +3,20 @@ class Cas < Formula
   homepage "https://github.com/tkersey/skills-zig"
   version "0.2.8"
 
-  on_macos do
-    depends_on arch: :arm64
+  if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-darwin-arm64.tar.gz"
     sha256 "a2ee09ecfb42342dafcbd045c9cffbe54e86f990d8357eea13cf76eb550e4935"
+  else
+    url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-linux-x86_64.tar.gz"
+    sha256 "16a3e460bcdccd447ea1dc425b48fc79d8fb48a5be4402336ab1e50fede9a8be"
+  end
+
+  on_macos do
+    depends_on arch: :arm64
   end
 
   on_linux do
     depends_on arch: :x86_64
-    url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-linux-x86_64.tar.gz"
-    sha256 "16a3e460bcdccd447ea1dc425b48fc79d8fb48a5be4402336ab1e50fede9a8be"
   end
 
   def install
