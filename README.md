@@ -21,3 +21,9 @@ Or `brew tap tkersey/tap` and then `brew install <formula>`.
 - Source: `https://github.com/tkersey/seq` tag `v0.1.2` tarball with pinned `sha256` in `Formula/seq.rb`.
 - Install (public): `brew tap tkersey/tap` then `brew install seq` (or `brew install tkersey/tap/seq`).
 - Validate with `brew style Formula/seq.rb`, `brew audit --strict tkersey/tap/seq`, `brew install --build-from-source tkersey/tap/seq`, and `brew test tkersey/tap/seq`.
+
+## St Release Checklist
+
+- Source: `https://github.com/tkersey/skills-zig` tag `st-v<version>` release assets; update both platform `sha256` values in `Formula/st.rb` after release publish.
+- Install (public): `brew tap tkersey/tap` then `brew install st` (or `brew install tkersey/tap/st`).
+- Validate with `brew style Formula/st.rb`, `brew audit --strict tkersey/tap/st`, and `brew test tkersey/tap/st`.
