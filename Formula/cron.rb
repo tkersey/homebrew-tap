@@ -1,15 +1,15 @@
 class Cron < Formula
   desc "Zig CLI for Codex automation schedule management"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.2.0"
+  version "0.2.1"
   license "MIT"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/cron-v#{version}/cron-v#{version}-darwin-arm64.tar.gz"
-    sha256 "530764bb101f1ded5a28f5a78364a989b62d3e83429ad51d223887658fe55ce7"
+    sha256 "abbfb191cb07da663831a30a35f8b0539fb76f2b2e513897d3702927e9067ab3"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/cron-v#{version}/cron-v#{version}-linux-x86_64.tar.gz"
-    sha256 "852b985ae967d9707f57cb4390b6c386130b31d5e5899ab4f9b0dc27578f7dc9"
+    sha256 "7f30c2bdec097f9b95e9ec135412103e6aae752a3e03a7216dc42bd6d1163908"
   end
 
   on_macos do
