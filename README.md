@@ -33,3 +33,9 @@ Or `brew tap tkersey/tap` and then `brew install <formula>`.
 - Source: `https://github.com/tkersey/skills-zig` tag `mesh-v<version>` release assets; update both platform `sha256` values in `Formula/mesh.rb` after release publish.
 - Install (public): `brew tap tkersey/tap` then `brew install mesh` (or `brew install tkersey/tap/mesh`).
 - Validate with `brew style Formula/mesh.rb`, `brew audit --strict tkersey/tap/mesh`, and `brew test tkersey/tap/mesh`.
+
+## Parse-Arch Release Checklist
+
+- Source: `https://github.com/tkersey/skills-zig` tag `parse-arch-v<version>` release assets; update both platform `sha256` values in `Formula/parse-arch.rb` after release publish.
+- Install (public): `brew tap tkersey/tap` then `brew install parse-arch` (or `brew install tkersey/tap/parse-arch`).
+- Validate with `brew style Formula/parse-arch.rb`, `brew audit --strict tkersey/tap/parse-arch`, and `brew test tkersey/tap/parse-arch`.
