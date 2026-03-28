@@ -1,14 +1,14 @@
 class Cas < Formula
   desc "Zig CLI helpers for Codex app-server orchestration"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.2.13"
+  version "0.2.14"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-darwin-arm64.tar.gz"
-    sha256 "f987b34b428a4f6e4d2507c4eab980b41b7aeb8825b8112663f259f4db2ba0f7"
+    sha256 "cb527f328078dfb895ef6ea6c8690ea67d7370514db5ea550c568e39a826e664"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-linux-x86_64.tar.gz"
-    sha256 "53f07ded287bd302c9020e963bff7ad3ddba3f350c4db16e2b672521dc3c2c0c"
+    sha256 "4e43135c77ea6e2e9058da92c7a6e6bf90b09c61601cd023a64fe1b1c52d3b04"
   end
 
   on_macos do
@@ -24,6 +24,7 @@ class Cas < Formula
     bin.install "cas-conformance-suite" => "cas_conformance_suite"
     bin.install "cas-smoke-check" => "cas_smoke_check"
     bin.install "cas-instance-runner" => "cas_instance_runner"
+    bin.install "cas-review-session" => "cas_review_session"
   end
 
   test do
@@ -42,6 +43,10 @@ class Cas < Formula
     runner_help = shell_output("#{bin}/cas_instance_runner --help 2>&1")
     assert_match "cas_instance_runner.zig", runner_help
     assert_match "Usage:", runner_help
+
+    review_help = shell_output("#{bin}/cas_review_session --help 2>&1")
+    assert_match "cas_review_session.zig", review_help
+    assert_match "Actions:", review_help
 
     dispatch_help = shell_output("#{bin}/cas conformance --help 2>&1")
     assert_match "cas_conformance_suite.zig", dispatch_help
