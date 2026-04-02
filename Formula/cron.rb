@@ -1,15 +1,15 @@
 class Cron < Formula
   desc "Zig CLI for Codex automation schedule management"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.2.5"
+  version "0.2.6"
   license "MIT"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/cron-v#{version}/cron-v#{version}-darwin-arm64.tar.gz"
-    sha256 "659f59b2aa964417689ea423d8ee12c5f042ac6acd104ed1c56ecbe5f69d9344"
+    sha256 "8f20da4cf2f7f1e6ea695842d2f2c22e1778c4d073573ca430a8765ff09c6669"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/cron-v#{version}/cron-v#{version}-linux-x86_64.tar.gz"
-    sha256 "e919c9c9b573d71626a0d403a08dc94fb90419d1730db3f56f35081410301a37"
+    sha256 "4b0a64bbde775266c335202ed27b4908f0b43bb75ab1dc9b74732e7f20c06d25"
   end
 
   on_macos do
@@ -26,7 +26,7 @@ class Cron < Formula
 
   test do
     cron_help = shell_output("#{bin}/cron --help 2>&1")
-    assert_match "cron.zig", cron_help
+    assert_match "Manage Codex automations with native Zig runtime", cron_help
     refute_match "uv run python", cron_help
   end
 end

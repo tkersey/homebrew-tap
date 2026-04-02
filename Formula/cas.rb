@@ -1,14 +1,14 @@
 class Cas < Formula
   desc "Zig CLI helpers for Codex app-server orchestration"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.2.20"
+  version "0.2.21"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-darwin-arm64.tar.gz"
-    sha256 "5f738591a1a05ca005d6e3edaec8297d1768a747994cae30a543a1efb96ef367"
+    sha256 "bf635daa94d8d409f502ada27676e1d1a9327ee423e14ee9c481a7fc699c5949"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-linux-x86_64.tar.gz"
-    sha256 "fa00de9636db304c3095c2975e351907e7c7b5118c4061d864030cd3cf4a5ee9"
+    sha256 "8365f2ee7ae63e74a541b97c41537e657916510951d529cea2c67aabcf06a292"
   end
 
   on_macos do
@@ -25,30 +25,34 @@ class Cas < Formula
     bin.install "cas-smoke-check" => "cas_smoke_check"
     bin.install "cas-instance-runner" => "cas_instance_runner"
     bin.install "cas-review-session" => "cas_review_session"
+    bin.install "cas-perf-budget-governor"
   end
 
   test do
     cas_help = shell_output("#{bin}/cas --help 2>&1")
-    assert_match "cas.zig", cas_help
+    assert_match "CAS dispatcher for subcommand-style usage", cas_help
     assert_match "Subcommands:", cas_help
 
     conformance_help = shell_output("#{bin}/cas_conformance_suite --help 2>&1")
-    assert_match "cas_conformance_suite.zig", conformance_help
+    assert_match "cas_conformance_suite", conformance_help
     assert_match "Usage:", conformance_help
 
     smoke_help = shell_output("#{bin}/cas_smoke_check --help 2>&1")
-    assert_match "cas_smoke_check.zig", smoke_help
+    assert_match "cas_smoke_check", smoke_help
     assert_match "Usage:", smoke_help
 
     runner_help = shell_output("#{bin}/cas_instance_runner --help 2>&1")
-    assert_match "cas_instance_runner.zig", runner_help
+    assert_match "cas_instance_runner", runner_help
     assert_match "Usage:", runner_help
 
     review_help = shell_output("#{bin}/cas_review_session --help 2>&1")
-    assert_match "cas_review_session.zig", review_help
+    assert_match "cas_review_session", review_help
     assert_match "Actions:", review_help
 
     dispatch_help = shell_output("#{bin}/cas conformance --help 2>&1")
-    assert_match "cas_conformance_suite.zig", dispatch_help
+    assert_match "cas_conformance_suite", dispatch_help
+
+    perf_help = shell_output("#{bin}/cas-perf-budget-governor --help 2>&1")
+    assert_match "Performance harness for budget_governor", perf_help
   end
 end
