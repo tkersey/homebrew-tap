@@ -22,6 +22,7 @@ class Lift < Formula
   test do
     assert_match "Summarize benchmark samples", shell_output("#{bin}/bench_stats --help 2>&1")
     assert_match "Generate a performance report template", shell_output("#{bin}/perf_report --help 2>&1")
-    assert_match "Performance harness for bench_stats parser", shell_output("#{bin}/lift-perf-bench-stats --help 2>&1")
+    perf_help = shell_output("#{bin}/lift-perf-bench-stats --help 2>&1")
+    assert_match "Performance harness for bench_stats parser", perf_help
   end
 end
