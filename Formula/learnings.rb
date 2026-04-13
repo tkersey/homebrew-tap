@@ -26,13 +26,13 @@ class Learnings < Formula
 
   test do
     learnings_help = shell_output("#{bin}/learnings --help 2>&1")
-    assert_match "learnings.zig", learnings_help
+    assert_match "Mine, recall, and promote records from repo-root .learnings.jsonl.", learnings_help
     assert_match "append", learnings_help
 
     append_subcommand_help = shell_output("#{bin}/learnings append --help 2>&1")
-    assert_match "append_learning.zig", append_subcommand_help
+    assert_match "Append a structured learning record", append_subcommand_help
 
     append_help = shell_output("#{bin}/append_learning --help 2>&1")
-    assert_match "append_learning.zig", append_help
+    assert_match "Append a structured learning record", append_help
   end
 end

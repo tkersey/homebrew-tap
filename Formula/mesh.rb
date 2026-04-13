@@ -25,6 +25,8 @@ class Mesh < Formula
   end
 
   test do
-    assert_match "mesh.zig", shell_output("#{bin}/mesh --help")
+    help = shell_output("#{bin}/mesh --help")
+    assert_match "Plan-driven orchestration helpers", help
+    assert_match "migration_gate", help
   end
 end

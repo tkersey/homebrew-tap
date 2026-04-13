@@ -26,7 +26,8 @@ class ParseArch < Formula
 
   test do
     parse_help = shell_output("#{bin}/parse-arch --help 2>&1")
-    assert_match "parse_arch.zig", parse_help
+    assert_match "Infer repository architecture signals", parse_help
+    assert_match "collect", parse_help
     refute_match "uv run", parse_help
   end
 end

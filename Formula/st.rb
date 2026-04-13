@@ -26,7 +26,7 @@ class St < Formula
 
   test do
     help = shell_output("#{bin}/st --help")
-    assert_match "st.zig", help
+    assert_match "Manage dependency-aware JSONL v3 plan state.", help
     assert_match "import-orchplan", help
     assert_match "import-mesh-results", help
   end
