@@ -26,6 +26,7 @@ class Puff < Formula
 
   test do
     puff_help = shell_output("#{bin}/puff --help 2>&1")
-    assert_match "puff.zig", puff_help
+    assert_match "Delegates non-help invocations to:", puff_help
+    assert_match "Version:", puff_help
   end
 end
