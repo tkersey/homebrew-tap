@@ -7,11 +7,11 @@ class Seq < Formula
   if OS.mac?
     depends_on arch: :arm64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-darwin-arm64.tar.gz"
-    sha256 "12a46c7f17ff4b2472afff9a1938849f4fb203436273a6d336d114f698584d85"
+    sha256 "1b81b7bc4c8d6118cdb78f40cbba82adaddaff449f10e1cb4dfd07ab6c259cb8"
   else
     depends_on arch: :x86_64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-linux-x86_64.tar.gz"
-    sha256 "e533a0e46776b6defbce443db56066b5483a74ac7c0fe4db3a50662c02add479"
+    sha256 "d424e7db24e1698368a88d0451b81a940fa7dfa0f8eff9f479263e728f3bc9ac"
   end
 
   def install
