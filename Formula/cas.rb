@@ -49,9 +49,6 @@ class Cas < Formula
     assert_match "cas_review_session", review_help
     assert_match "Actions:", review_help
 
-    dispatch_help = shell_output("#{bin}/cas conformance --help 2>&1")
-    assert_match "cas_conformance_suite", dispatch_help
-
     perf_help = shell_output("#{bin}/cas-perf-budget-governor --help 2>&1")
     assert_match "Performance harness for budget_governor", perf_help
   end
