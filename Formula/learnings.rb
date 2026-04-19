@@ -6,10 +6,10 @@ class Learnings < Formula
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/learnings-v#{version}/learnings-v#{version}-darwin-arm64.tar.gz"
-    sha256 "4d4c9ab4a0dbdfc2843e6bed855327b17095870be1848d77b67d0d2e734ebb1a"
+    sha256 "8a7b37d8fb0ab4bbd5d6b5561387f50a188437f4a35b46c104b92c3aeddd0500"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/learnings-v#{version}/learnings-v#{version}-linux-x86_64.tar.gz"
-    sha256 "58d10f4ca8ecbac4db3aa1dc533d79a0556c51e54a46467040216dd2bf2a9817"
+    sha256 "6c82f8ca67142d439dd2c9bee9a0b5f78d452cac7976a0054b0b5efecaab0289"
   end
 
   on_macos do
