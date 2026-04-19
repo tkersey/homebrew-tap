@@ -1,15 +1,15 @@
 class Mesh < Formula
   desc "Zig CLI for plan-driven orchestration helpers"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.1.5"
+  version "0.1.6"
   license "MIT"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/mesh-v#{version}/mesh-v#{version}-darwin-arm64.tar.gz"
-    sha256 "659bd92f36050f3a68b07583020d647bbc30059407b02264af6834c3d8ba1517"
+    sha256 "3233d913b78c6c88e83920c25369b42a5c182336f73e6ad2971f92a9fb40768a"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/mesh-v#{version}/mesh-v#{version}-linux-x86_64.tar.gz"
-    sha256 "ded90e32641e82e64bf038df0b0cfdf385cad718b8443e07c0753b0c308042ed"
+    sha256 "94546f1c50d475e577cbcb87d1b5eb64525f568c8769ac7838733099d9e53b05"
   end
 
   on_macos do
