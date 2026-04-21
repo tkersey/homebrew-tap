@@ -1,15 +1,15 @@
 class Learnings < Formula
   desc "Zig CLIs for Codex learnings capture workflows"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.1.14"
+  version "0.1.15"
   license "MIT"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/learnings-v#{version}/learnings-v#{version}-darwin-arm64.tar.gz"
-    sha256 "8a7b37d8fb0ab4bbd5d6b5561387f50a188437f4a35b46c104b92c3aeddd0500"
+    sha256 "fc1dde8c0ccab33e4e6e6af855e57e54335b7a7732f0f7ba45094b74a0417cb8"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/learnings-v#{version}/learnings-v#{version}-linux-x86_64.tar.gz"
-    sha256 "6c82f8ca67142d439dd2c9bee9a0b5f78d452cac7976a0054b0b5efecaab0289"
+    sha256 "bd12bac75aea879bf582af58b13f847230fdfc945ce4dcc9f061a689ced1606a"
   end
 
   on_macos do
