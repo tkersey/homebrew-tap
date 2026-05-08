@@ -1,17 +1,17 @@
 class Seq < Formula
   desc "Zig CLI for mining Codex session and memory artifacts"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.2.28"
+  version "0.2.29"
   license "MIT"
 
   if OS.mac?
     depends_on arch: :arm64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-darwin-arm64.tar.gz"
-    sha256 "0590f126b50a5795c31056db106c2f2d64a893f075cf38e77a8d245c7b9638dc"
+    sha256 "cce7aac347c792bf664031292ddc1261455f7e5ff0e8ae6b45f326fe8edc5434"
   else
     depends_on arch: :x86_64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-linux-x86_64.tar.gz"
-    sha256 "916d189b91308fd0d25118b1016db0e7ccb262d996647fcec9fffe3b611c7bb7"
+    sha256 "3b30277f56ce8c874c50f5ec21ed795c69a327f7ca09f0bd37c3e59a7d47286e"
   end
 
   def install
@@ -23,6 +23,11 @@ class Seq < Formula
     assert_match "skills-rank", help
     assert_match "skill-blocks", help
     assert_match "artifact-search", help
+    assert_match "skill-audit", help
+    assert_match "tool-audit", help
+    assert_match "memory-inventory", help
+    assert_match "message-search", help
+    assert_match "workdir-report", help
     assert_match "memory-provenance", help
     assert_match "memory-map", help
     assert_match "memory-history", help
@@ -33,5 +38,11 @@ class Seq < Formula
     assert_match "--tz", token_help
     assert_match "--summary", token_help
     assert_match "--audit", token_help
+
+    assert_match "summary|mentions|trend", shell_output("#{bin}/seq skill-audit --help")
+    assert_match "summary|rows|args|unresolved", shell_output("#{bin}/seq tool-audit --help")
+    assert_match "categories|files|blocks|stage1|extensions", shell_output("#{bin}/seq memory-inventory --help")
+    assert_match "--contains-any", shell_output("#{bin}/seq message-search --help")
+    assert_match "summary|sessions", shell_output("#{bin}/seq workdir-report --help")
   end
 end
