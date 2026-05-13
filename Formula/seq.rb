@@ -1,17 +1,17 @@
 class Seq < Formula
   desc "Zig CLI for mining Codex session and memory artifacts"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.2.32"
+  version "0.2.33"
   license "MIT"
 
   if OS.mac?
     depends_on arch: :arm64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-darwin-arm64.tar.gz"
-    sha256 "6b1b5c798ab3b57f02d94534de15f5e0b56b1f5ff77de2c5510f82fa124804ba"
+    sha256 "dd8b3caa2871aa3dc47e057bcb144599679a3871b4875e51e4bff0790da31199"
   else
     depends_on arch: :x86_64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-linux-x86_64.tar.gz"
-    sha256 "e85f1c52fbe92d943029e615ccd67c78e713088ba92709a2a2804d36ae121857"
+    sha256 "97271ca1d4a0dc7f6a6f9d8099e0df53c7252c7cf0477c928c81111428d35f3d"
   end
 
   def install
@@ -39,6 +39,7 @@ class Seq < Formula
     assert_match "tool-search", help
     assert_match "memory-extension-audit", help
     assert_match "token-window", help
+    assert_match "goal-audit", help
 
     token_help = shell_output("#{bin}/seq token-usage --help")
     assert_match "--tz", token_help
@@ -55,5 +56,6 @@ class Seq < Formula
     assert_match "rows|summary|args", shell_output("#{bin}/seq tool-search --help")
     assert_match "summary|rows", shell_output("#{bin}/seq memory-extension-audit --help")
     assert_match "--window-hours", shell_output("#{bin}/seq token-window --help")
+    assert_match "review|resolve", shell_output("#{bin}/seq goal-audit --help")
   end
 end
