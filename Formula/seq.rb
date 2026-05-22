@@ -1,17 +1,17 @@
 class Seq < Formula
   desc "Zig CLI for mining Codex session and memory artifacts"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.2.34"
+  version "0.2.35"
   license "MIT"
 
   if OS.mac?
     depends_on arch: :arm64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-darwin-arm64.tar.gz"
-    sha256 "1aa876b312f32545b6003a4f9ab231907ca8ad99d30b6491834bc056907c1a3f"
+    sha256 "4d207c8b05ec93a695d1b7e624530cde90aae75cd73cd3b768e37f4dbc4ee195"
   else
     depends_on arch: :x86_64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-linux-x86_64.tar.gz"
-    sha256 "556a46a52c4364be3396435d74a3dea7707c2a73273e325d685d167b778e445a"
+    sha256 "40190a07d23fe7aec252c8f05844b509487df5c15248238d9267704337f842fc"
   end
 
   def install
@@ -43,8 +43,13 @@ class Seq < Formula
 
     token_help = shell_output("#{bin}/seq token-usage --help")
     assert_match "--tz", token_help
+    assert_match "--last", token_help
     assert_match "--summary", token_help
     assert_match "--audit", token_help
+
+    token_cost_help = shell_output("#{bin}/seq token-cost --help")
+    assert_match "--pricing", token_cost_help
+    assert_match "--model", token_cost_help
 
     assert_match "summary|mentions|trend", shell_output("#{bin}/seq skill-audit --help")
     assert_match "summary|rows|args|unresolved", shell_output("#{bin}/seq tool-audit --help")
