@@ -1,14 +1,14 @@
 class Cas < Formula
   desc "Zig CLI helpers for Codex app-server orchestration"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.2.31"
+  version "0.2.32"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-darwin-arm64.tar.gz"
-    sha256 "37454b81e460d0952344b5997df6f5192f40e08940545c182d9392c8b9d3848b"
+    sha256 "ba7a9b306be98ee88648b298a3eb870d95d0459a3a4e5da85a0587d7dedf85e6"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-linux-x86_64.tar.gz"
-    sha256 "b75f3b375a6edfd1ca569a1519cc79d9fee2201378875c1106a2ec3d597450cd"
+    sha256 "4b56fe5d30ef30675e3ddd1295502c7957f52bbef770a76ae4227dadfe6f8bff"
   end
 
   on_macos do
@@ -48,6 +48,7 @@ class Cas < Formula
     review_help = shell_output("#{bin}/cas_review_session --help 2>&1")
     assert_match "cas_review_session", review_help
     assert_match "Actions:", review_help
+    assert_match "--verdict-only", review_help
 
     perf_help = shell_output("#{bin}/cas-perf-budget-governor --help 2>&1")
     assert_match "Performance harness for budget_governor", perf_help
