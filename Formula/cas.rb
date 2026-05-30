@@ -1,14 +1,14 @@
 class Cas < Formula
   desc "Zig CLI helpers for Codex app-server orchestration"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.2.33"
+  version "0.2.34"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-darwin-arm64.tar.gz"
-    sha256 "a2554d0630d0430e722365de9d0025d719daf70d9c72eee42bb21cd3b6871414"
+    sha256 "e412e735aa4601f4393c37a940b161a91f3953ca7e19a7d83dfec13c293d601d"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-linux-x86_64.tar.gz"
-    sha256 "1a7a19e5a9e556054aaffb678465562998129a6358d9dd325fb074e0125cbf0d"
+    sha256 "5e090a30dfbbae2b49e0d458d4594714af4a7c8fd4f642f9a7644388cea151f3"
   end
 
   on_macos do
@@ -22,6 +22,7 @@ class Cas < Formula
   def install
     bin.install "cas"
     bin.install "cas-conformance-suite" => "cas_conformance_suite"
+    bin.install "cas-goal" => "cas_goal"
     bin.install "cas-smoke-check" => "cas_smoke_check"
     bin.install "cas-instance-runner" => "cas_instance_runner"
     bin.install "cas-review-session" => "cas_review_session"
@@ -32,10 +33,15 @@ class Cas < Formula
     cas_help = shell_output("#{bin}/cas --help 2>&1")
     assert_match "CAS dispatcher for subcommand-style usage", cas_help
     assert_match "Subcommands:", cas_help
+    assert_match "goal", cas_help
 
     conformance_help = shell_output("#{bin}/cas_conformance_suite --help 2>&1")
     assert_match "cas_conformance_suite", conformance_help
     assert_match "Usage:", conformance_help
+
+    goal_help = shell_output("#{bin}/cas_goal --help 2>&1")
+    assert_match "cas_goal", goal_help
+    assert_match "resolve|get|set|clear|status|wait", goal_help
 
     smoke_help = shell_output("#{bin}/cas_smoke_check --help 2>&1")
     assert_match "cas_smoke_check", smoke_help
