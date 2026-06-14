@@ -1,17 +1,17 @@
 class Seq < Formula
   desc "Zig CLI for mining Codex session and memory artifacts"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.2.45"
+  version "0.2.46"
   license "MIT"
 
   if OS.mac?
     depends_on arch: :arm64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-darwin-arm64.tar.gz"
-    sha256 "208289bd81f54e39243c70ec631ced5069343e767b23038cee7e272b801cea3f"
+    sha256 "0ffe5751a623cd664ce8d60227920e9309ffea337dff855c544d50affc304622"
   else
     depends_on arch: :x86_64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-linux-x86_64.tar.gz"
-    sha256 "94dfeecde6d97e878536c201c1f6dac9aa7724b17e4f5354806db602c4cc6ed4"
+    sha256 "d341b4d218d3a3da5ac3d86063114cda61440b2c85052011ce5847807f16b979"
   end
 
   def install
@@ -22,6 +22,7 @@ class Seq < Formula
     help = shell_output("#{bin}/seq --help")
     assert_match "skills-rank", help
     assert_match "skill-success-rank", help
+    assert_match "skill-evidence", help
     assert_match "skill-blocks", help
     assert_match "artifact-search", help
     assert_match "skill-audit", help
