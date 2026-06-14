@@ -1,17 +1,17 @@
 class Seq < Formula
   desc "Zig CLI for mining Codex session and memory artifacts"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.2.44"
+  version "0.2.45"
   license "MIT"
 
   if OS.mac?
     depends_on arch: :arm64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-darwin-arm64.tar.gz"
-    sha256 "5811f9385f2e60db928d852ea4609e794e227f089a2c764a8ed1252ffbcdf3ff"
+    sha256 "208289bd81f54e39243c70ec631ced5069343e767b23038cee7e272b801cea3f"
   else
     depends_on arch: :x86_64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-linux-x86_64.tar.gz"
-    sha256 "4eea9e45a75c98b1dbb5c665ed4d1456bb34b9a6a1bec04b0c8b6e18d9511dab"
+    sha256 "94dfeecde6d97e878536c201c1f6dac9aa7724b17e4f5354806db602c4cc6ed4"
   end
 
   def install
@@ -70,7 +70,9 @@ class Seq < Formula
     artifact_search_help = shell_output("#{bin}/seq artifact-search --help")
     assert_match "--contains-any", artifact_search_help
     assert_match "summary|rows|sessions", shell_output("#{bin}/seq message-audit --help")
-    assert_match "summary|cohort|mentions", shell_output("#{bin}/seq skill-cohort --help")
+    skill_cohort_help = shell_output("#{bin}/seq skill-cohort --help")
+    assert_match "summary|cohort|mentions", skill_cohort_help
+    assert_match "--last", skill_cohort_help
     tool_search_help = shell_output("#{bin}/seq tool-search --help")
     assert_match "rows|summary|args", tool_search_help
     assert_match "--path", tool_search_help
@@ -82,6 +84,7 @@ class Seq < Formula
     workflow_audit_help = shell_output("#{bin}/seq workflow-audit --help")
     assert_match "term-summary", workflow_audit_help
     assert_match "--term-group", workflow_audit_help
+    assert_match "--last", workflow_audit_help
     adjudication_help = shell_output("#{bin}/seq adjudication-audit --help")
     assert_match "summary|rows|report", adjudication_help
     assert_match "--include-root-equivalent", adjudication_help
