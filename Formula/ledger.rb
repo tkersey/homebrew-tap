@@ -6,10 +6,10 @@ class Ledger < Formula
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-darwin-arm64.tar.gz"
-    sha256 "d4900655488ee41d2a8194d0d5758568e95af481e40be835ec4e16fbea8f30b9"
+    sha256 "09dee31b862f51d4d2ccc82c70cbc0ef5d5e0ae56dd9f37c3dc85e29f64c2847"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-linux-x86_64.tar.gz"
-    sha256 "b3cf1832a76aaba0971f8678268dd1992de8cdbf54812d53912878d2b5033fbe"
+    sha256 "159a2454b257759c1c30f6573b81e1619d7803c0e63069cb02c1942f82ed9147"
   end
 
   on_macos do
