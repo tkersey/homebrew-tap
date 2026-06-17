@@ -1,15 +1,15 @@
 class St < Formula
   desc "Zig CLI for dependency-aware durable task plans"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.3.3"
+  version "0.3.4"
   license "MIT"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/st-v#{version}/st-v#{version}-darwin-arm64.tar.gz"
-    sha256 "35a01990fe112f506a193a97ac1e98b5169a62e3742cd6a25ae992394d8fdefb"
+    sha256 "7fc20e6a55f7eb6d448428a516df1002a11d1bf2501b834840a071eb5a15de53"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/st-v#{version}/st-v#{version}-linux-x86_64.tar.gz"
-    sha256 "64b3169cc1a5b0fee04ca0f63d9261d1e763f7f7ba53c24fc482eca9d13436d1"
+    sha256 "d61e747af47d372f8759331ffe1b66d529c9d9caaea31d4aa8060ad56119f181"
   end
 
   on_macos do
@@ -34,5 +34,8 @@ class St < Formula
     assert_match "intake", help
     assert_match "graph", help
     assert_match "complete", help
+    assert_match "usage: st prime --file PATH [options]", shell_output("#{bin}/st prime --help")
+    assert_match "usage: st complete --file PATH --id ID --command CMD --evidence-ref REF [options]",
+      shell_output("#{bin}/st complete --help")
   end
 end
