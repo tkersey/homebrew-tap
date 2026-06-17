@@ -35,6 +35,6 @@ class Ledger < Formula
 
     system bin/"ledger", "init"
     assert_path_exists testpath/".ledger/negative-ledger.jsonl"
-    assert_match "\"status\":\"ok\"", shell_output("#{bin}/ledger doctor")
+    assert_match "\"ok\":true", shell_output("#{bin}/ledger doctor")
   end
 end
