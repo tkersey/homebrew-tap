@@ -35,7 +35,9 @@ class St < Formula
     assert_match "graph", help
     assert_match "complete", help
     assert_match "usage: st prime --file PATH [options]", shell_output("#{bin}/st prime --help")
-    assert_match "usage: st complete --file PATH --id ID --command CMD --evidence-ref REF [options]",
-      shell_output("#{bin}/st complete --help")
+    complete_help = shell_output("#{bin}/st complete --help")
+    assert_match "usage: st complete --file PATH --id ID [--command CMD --evidence-ref REF] [options]", complete_help
+    assert_match "--command CMD", complete_help
+    assert_match "--evidence-ref REF", complete_help
   end
 end
