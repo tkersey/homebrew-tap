@@ -1,17 +1,17 @@
 class Seq < Formula
   desc "Zig CLI for mining Codex session and memory artifacts"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.2.49"
+  version "0.2.50"
   license "MIT"
 
   if OS.mac?
     depends_on arch: :arm64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-darwin-arm64.tar.gz"
-    sha256 "fd140bc8be9ad205bf08754ade3677b59c8c7a569f6fac131937e8ed1b559d61"
+    sha256 "2a9bd91f5e081e14e32845c61ce96d0e7dd6fde166160ae24ccf47418cd26fe0"
   else
     depends_on arch: :x86_64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-linux-x86_64.tar.gz"
-    sha256 "b7a1b1e85f90d64eed29bf0823fbaf9b8d9128c8ec64ee1c5f7af6d48c1794fe"
+    sha256 "71b4b3ac9931f2cb39f4bd42c94a7c90b734c881024c7878edc717a37217dddf"
   end
 
   def install
@@ -85,6 +85,7 @@ class Seq < Formula
     assert_match "--window-hours", shell_output("#{bin}/seq token-window --help")
     assert_match "review|resolve", shell_output("#{bin}/seq goal-audit --help")
     workflow_audit_help = shell_output("#{bin}/seq workflow-audit --help")
+    assert_match "cohort-report", workflow_audit_help
     assert_match "term-summary", workflow_audit_help
     assert_match "--term-group", workflow_audit_help
     assert_match "--last", workflow_audit_help
