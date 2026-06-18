@@ -1,17 +1,17 @@
 class Seq < Formula
   desc "Zig CLI for mining Codex session and memory artifacts"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.2.46"
+  version "0.2.49"
   license "MIT"
 
   if OS.mac?
     depends_on arch: :arm64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-darwin-arm64.tar.gz"
-    sha256 "0ffe5751a623cd664ce8d60227920e9309ffea337dff855c544d50affc304622"
+    sha256 "fd140bc8be9ad205bf08754ade3677b59c8c7a569f6fac131937e8ed1b559d61"
   else
     depends_on arch: :x86_64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-linux-x86_64.tar.gz"
-    sha256 "d341b4d218d3a3da5ac3d86063114cda61440b2c85052011ce5847807f16b979"
+    sha256 "b7a1b1e85f90d64eed29bf0823fbaf9b8d9128c8ec64ee1c5f7af6d48c1794fe"
   end
 
   def install
@@ -44,6 +44,8 @@ class Seq < Formula
     assert_match "goal-audit", help
     assert_match "adjudication-audit", help
     assert_match "workflow-overlap", help
+    assert_match "resolve-churn-audit", help
+    assert_match "review-compiler-audit", help
 
     token_help = shell_output("#{bin}/seq token-usage --help")
     assert_match "--tz", token_help
@@ -90,5 +92,17 @@ class Seq < Formula
     assert_match "summary|rows|report", adjudication_help
     assert_match "--include-root-equivalent", adjudication_help
     assert_match "--bundle-dir", adjudication_help
+
+    resolve_churn_help = shell_output("#{bin}/seq resolve-churn-audit --help")
+    assert_match "--since", resolve_churn_help
+    assert_match "--until", resolve_churn_help
+    assert_match "--repo", resolve_churn_help
+    assert_match "markdown|json", resolve_churn_help
+
+    review_compiler_help = shell_output("#{bin}/seq review-compiler-audit --help")
+    assert_match "--since", review_compiler_help
+    assert_match "--until", review_compiler_help
+    assert_match "--repo", review_compiler_help
+    assert_match "markdown|json", review_compiler_help
   end
 end
