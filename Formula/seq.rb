@@ -1,17 +1,17 @@
 class Seq < Formula
   desc "Zig CLI for mining Codex session and memory artifacts"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.2.51"
+  version "0.2.52"
   license "MIT"
 
   if OS.mac?
     depends_on arch: :arm64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-darwin-arm64.tar.gz"
-    sha256 "61b4e7fee6f5b18fa7ba66e16eecc7a2b1e42a5b511dd97cc8096103aa58bd2e"
+    sha256 "d055b144f7545674f4006e57c9224b5429a73f55f496950dd9c21a5595fefd8b"
   else
     depends_on arch: :x86_64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-linux-x86_64.tar.gz"
-    sha256 "3f746d447226ac1832557703137e81506eeeddc8786566665c6116b0e3329266"
+    sha256 "c3b233b52262faa867365094be230c5418e1ce5f9ac593660a081fb739f82be3"
   end
 
   def install
@@ -63,6 +63,7 @@ class Seq < Formula
     assert_match "--last", skill_audit_help
     assert_match "summary|sessions", shell_output("#{bin}/seq skill-success-rank --help")
     skill_blocks_help = shell_output("#{bin}/seq skill-blocks --help")
+    assert_match "blocks|body|term-counts|term-summary", skill_blocks_help
     assert_match "term-counts", skill_blocks_help
     assert_match "term-summary", skill_blocks_help
     assert_match "--term-group", skill_blocks_help
