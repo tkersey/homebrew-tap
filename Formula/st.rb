@@ -1,15 +1,15 @@
 class St < Formula
   desc "Zig CLI for dependency-aware durable task plans"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.4.1"
+  version "0.4.2"
   license "MIT"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/st-v#{version}/st-v#{version}-darwin-arm64.tar.gz"
-    sha256 "fc40e6253fc5ea747c221bdf4fa9b8ec03715ffe0ea633ca49c346b738197cda"
+    sha256 "f86bd2b3cbd495c70269c9efa4131f4f0f491ea4269be613ddb28f5e91d9d5a3"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/st-v#{version}/st-v#{version}-linux-x86_64.tar.gz"
-    sha256 "64350b61850603c5738dcc574d5ce73498a750a50c17d46f5469796f554854c7"
+    sha256 "624fa994d46e8969e1f8bece1a5a4b31485bd49235f11dcf7d2d54262347740b"
   end
 
   on_macos do
@@ -39,5 +39,8 @@ class St < Formula
     assert_match "usage: st complete --file PATH --id ID [--command CMD --evidence-ref REF] [options]", complete_help
     assert_match "--command CMD", complete_help
     assert_match "--evidence-ref REF", complete_help
+    compile_aperture_help = shell_output("#{bin}/st compile aperture --help")
+    assert_match "--parallelism auto", compile_aperture_help
+    assert_match "Legacy no-op compatibility alias", compile_aperture_help
   end
 end
