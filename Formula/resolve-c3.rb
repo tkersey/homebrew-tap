@@ -1,15 +1,15 @@
 class ResolveC3 < Formula
   desc "Zig controller for the resolve C3 workflow"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.1.0"
+  version "0.1.1"
   license "MIT"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/resolve-c3-v#{version}/resolve-c3-v#{version}-darwin-arm64.tar.gz"
-    sha256 "a255e4f8f3af10b1967baa0aaabe3448ccc6c1d7513676adb63cf0640e7501fc"
+    sha256 "9d45a72c92a369ff2e6785d7b1e0df83e706f87e0cdc506586fba845154e5fdc"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/resolve-c3-v#{version}/resolve-c3-v#{version}-linux-x86_64.tar.gz"
-    sha256 "622639450f2f0d88b0139684f593b175ba08864555e7e1d5eb38323fa076dfd8"
+    sha256 "a917d7722217cb04b672afc5392943c85d2740b387147a71c301797ccd41db05"
   end
 
   on_macos do
