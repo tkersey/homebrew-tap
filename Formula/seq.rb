@@ -1,17 +1,17 @@
 class Seq < Formula
   desc "Zig CLI for mining Codex session and memory artifacts"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.2.54"
+  version "0.3.0"
   license "MIT"
 
   if OS.mac?
     depends_on arch: :arm64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-darwin-arm64.tar.gz"
-    sha256 "178c254ddb7495685c25b633786dd0995b4da0adc61e5283e4258a6738096c86"
+    sha256 "7182e520bc288fcf72e900bed10a66fd6b0ccd334184fe82b4f6e6f1c177be6d"
   else
     depends_on arch: :x86_64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-linux-x86_64.tar.gz"
-    sha256 "fb4e4f018128c722123b273e998cec0124b0d08333d79acfc85c0f335a553b23"
+    sha256 "bdbdf7cea19f1187d9cf054992947feb82988f906ac238fd14b36b78fbbd20ce"
   end
 
   def install
@@ -46,6 +46,9 @@ class Seq < Formula
     assert_match "workflow-overlap", help
     assert_match "resolve-churn-audit", help
     assert_match "review-compiler-audit", help
+    assert_match "skill-decision-audit", help
+    assert_match "skill-contract", help
+    assert_match "skill-decision-receipt", help
 
     token_help = shell_output("#{bin}/seq token-usage --help")
     assert_match "--tz", token_help
