@@ -124,8 +124,8 @@ class Seq < Formula
 
     decision_capsule_help = shell_output("#{bin}/seq decision-capsule --help")
     assert_match "capsule|candidates|anchors|validate", decision_capsule_help
-    assert_match "--outcome-policy", decision_capsule_help
-    assert_match "--include-excerpts", decision_capsule_help
+    assert_match "--mode", decision_capsule_help
+    assert_match "--format", decision_capsule_help
     assert_match "table|json|jsonl|csv|markdown", decision_capsule_help
 
     decision_capsules_schema = shell_output(
