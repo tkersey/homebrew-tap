@@ -1,14 +1,14 @@
 class Cas < Formula
   desc "Zig CLI helpers for Codex app-server orchestration"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.2.37"
+  version "0.2.38"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-darwin-arm64.tar.gz"
-    sha256 "63ed2b67c92cdeda61eee11067f8cd71ca47b20135ae4b0f75b82ed7098e1448"
+    sha256 "ef0356e43a64abf2eedfac8c0eb2ee3b2015c7f1fa5df517805a3158d800b705"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-linux-x86_64.tar.gz"
-    sha256 "19972f005d2d9bdd6b48dc1884cac9c5f419e06bb772da314a4713a8af1e240b"
+    sha256 "196215f38d2ee3f60826cd447bf3b414f00c39be5d76d85677297a30c7218b91"
   end
 
   on_macos do
@@ -26,6 +26,7 @@ class Cas < Formula
     bin.install "cas-smoke-check" => "cas_smoke_check"
     bin.install "cas-instance-runner" => "cas_instance_runner"
     bin.install "cas-review-session" => "cas_review_session"
+    bin.install "cas-session-inquiry" => "cas_session_inquiry"
     bin.install "cas-perf-budget-governor"
   end
 
@@ -58,6 +59,10 @@ class Cas < Formula
     assert_match "receipt", review_help
     assert_match "--verdict-only", review_help
     assert_match "--multi-agent-mode", review_help
+
+    inquiry_help = shell_output("#{bin}/cas_session_inquiry --help 2>&1")
+    assert_match "cas_session_inquiry", inquiry_help
+    assert_match "session_inquiry", shell_output("#{bin}/cas --help 2>&1")
 
     perf_help = shell_output("#{bin}/cas-perf-budget-governor --help 2>&1")
     assert_match "Performance harness for budget_governor", perf_help
