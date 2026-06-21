@@ -1,17 +1,17 @@
 class Seq < Formula
   desc "Zig CLI for mining Codex session and memory artifacts"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.3.0"
+  version "0.3.2"
   license "MIT"
 
   if OS.mac?
     depends_on arch: :arm64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-darwin-arm64.tar.gz"
-    sha256 "7182e520bc288fcf72e900bed10a66fd6b0ccd334184fe82b4f6e6f1c177be6d"
+    sha256 "9dbf5a3bfe2dd0ffa0333deab11065b29c402bc7cf13146cbec4bb305352e415"
   else
     depends_on arch: :x86_64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-linux-x86_64.tar.gz"
-    sha256 "bdbdf7cea19f1187d9cf054992947feb82988f906ac238fd14b36b78fbbd20ce"
+    sha256 "9fa7f56d0095deedb8fa67b5d0a6ee3f53ae944b22e11e6d818a6081d27cd8f0"
   end
 
   def install
@@ -49,6 +49,15 @@ class Seq < Formula
     assert_match "skill-decision-audit", help
     assert_match "skill-contract", help
     assert_match "skill-decision-receipt", help
+    assert_match "decision-capsule", help
+    assert_match "dataset-schema", help
+    assert_match "query", help
+
+    capabilities = shell_output("#{bin}/seq capabilities --format json")
+    assert_match "\"decision_capsule_v1\": true", capabilities
+    assert_match "\"decision_anchor_v1\": true", capabilities
+    assert_match "\"historical_decisions_dataset_v1\": true", capabilities
+    assert_match "\"dcp_validation_v1\": true", capabilities
 
     token_help = shell_output("#{bin}/seq token-usage --help")
     assert_match "--tz", token_help
@@ -112,5 +121,14 @@ class Seq < Formula
     assert_match "c3-mrpc", review_compiler_help
     assert_match "mbk", review_compiler_help
     assert_match "markdown|json", review_compiler_help
+
+    decision_capsule_help = shell_output("#{bin}/seq decision-capsule --help")
+    assert_match "capsule|candidates|anchors|validate", decision_capsule_help
+    assert_match "--outcome-policy", decision_capsule_help
+    assert_match "--include-excerpts", decision_capsule_help
+    assert_match "table|json|jsonl|csv|markdown", decision_capsule_help
+
+    assert_match "decision_capsules", shell_output("#{bin}/seq dataset-schema --dataset decision_capsules --format json")
+    assert_match "historical_decisions", shell_output("#{bin}/seq dataset-schema --dataset historical_decisions --format json")
   end
 end
