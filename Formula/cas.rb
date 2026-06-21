@@ -1,14 +1,14 @@
 class Cas < Formula
   desc "Zig CLI helpers for Codex app-server orchestration"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.2.38"
+  version "0.2.39"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-darwin-arm64.tar.gz"
-    sha256 "ef0356e43a64abf2eedfac8c0eb2ee3b2015c7f1fa5df517805a3158d800b705"
+    sha256 "003625fd3ce18deab52990d1b7e40a8824efc95d07c088e7196e1e2c8a1eee4e"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-linux-x86_64.tar.gz"
-    sha256 "196215f38d2ee3f60826cd447bf3b414f00c39be5d76d85677297a30c7218b91"
+    sha256 "7ced5cf92fca434fdc7d178af5d7725bfa5484410d5b1d443b1eaa43bbf31d32"
   end
 
   on_macos do
