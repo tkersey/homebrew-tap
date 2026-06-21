@@ -128,10 +128,14 @@ class Seq < Formula
     assert_match "--include-excerpts", decision_capsule_help
     assert_match "table|json|jsonl|csv|markdown", decision_capsule_help
 
-    decision_capsules_schema = shell_output("#{bin}/seq dataset-schema --dataset decision_capsules --format json")
+    decision_capsules_schema = shell_output(
+      "#{bin}/seq dataset-schema --dataset decision_capsules --format json",
+    )
     assert_match "decision_capsules", decision_capsules_schema
 
-    historical_decisions_schema = shell_output("#{bin}/seq dataset-schema --dataset historical_decisions --format json")
+    historical_decisions_schema = shell_output(
+      "#{bin}/seq dataset-schema --dataset historical_decisions --format json",
+    )
     assert_match "historical_decisions", historical_decisions_schema
   end
 end
