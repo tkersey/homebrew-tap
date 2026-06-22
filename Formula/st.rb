@@ -6,10 +6,10 @@ class St < Formula
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/st-v#{version}/st-v#{version}-darwin-arm64.tar.gz"
-    sha256 "4bcce69b7f61c9ca8fcfc1d69771d98d27b38d4e26c31cdc86b5d242d40c8909"
+    sha256 "871c09d291eddc59784d251154b372f659249c02b54bf51179f0e4c90f0c2c99"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/st-v#{version}/st-v#{version}-linux-x86_64.tar.gz"
-    sha256 "b8b09f5d75192b02569d980a8a73535928bee0a80591ae611118dce85a67c285"
+    sha256 "822f5851e2e37ed6849d1873a222f220a2b1587a2189de4fcf7ff6de8b81c5ae"
   end
 
   on_macos do
