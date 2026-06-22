@@ -129,7 +129,10 @@ class Seq < Formula
       {"type":"event_msg","timestamp":"2026-05-13T12:00:01Z","payload":{"type":"agent_message","turn_id":"x1","message":"MRPC-v1 minimal_review_patch_certificate\\nclosed"}}
     JSONL
     review_compiler_audit = shell_output(
-      "#{bin}/seq review-compiler-audit --root #{testpath}/sessions --protocol c3 --since 2026-05-13T00:00:00Z --until 2026-05-14T00:00:00Z --repo #{testpath} --format json",
+      "#{bin}/seq review-compiler-audit " \
+      "--root #{testpath}/sessions --protocol c3 " \
+      "--since 2026-05-13T00:00:00Z --until 2026-05-14T00:00:00Z " \
+      "--repo #{testpath} --format json",
     )
     assert_match "\"included_sessions\"", review_compiler_audit
     assert_match "\"reason\": \"no_c3_begin_signal\"", review_compiler_audit
