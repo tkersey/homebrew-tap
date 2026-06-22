@@ -1,14 +1,14 @@
 class Cas < Formula
   desc "Zig CLI helpers for Codex app-server orchestration"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.2.43"
+  version "0.2.44"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-darwin-arm64.tar.gz"
-    sha256 "fcfd940e4a1b2fa725f0ccf419e4826db24f3c448468fcfa4d44b500a341ba79"
+    sha256 "bb788315fff845c86dd59690de9e3ef268f0a94d03ee5e5e11752e40ce0a3f5c"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-linux-x86_64.tar.gz"
-    sha256 "2bafbd8a63220bb30c3302889542a57fcc269c183e70db2870082a137d3f9835"
+    sha256 "a40d7b1960a6ed740424f08a7b24da61b4809f91c9cda5c130afe18e6554957b"
   end
 
   on_macos do
@@ -21,6 +21,7 @@ class Cas < Formula
 
   def install
     bin.install "cas"
+    bin.install "cas_account"
     bin.install "cas-conformance-suite" => "cas_conformance_suite"
     bin.install "cas-goal" => "cas_goal"
     bin.install "cas-smoke-check" => "cas_smoke_check"
@@ -35,6 +36,10 @@ class Cas < Formula
     assert_match "CAS dispatcher for subcommand-style usage", cas_help
     assert_match "Subcommands:", cas_help
     assert_match "goal", cas_help
+
+    account_help = shell_output("#{bin}/cas_account --help 2>&1")
+    assert_match "cas_account", account_help
+    assert_match "Usage:", account_help
 
     conformance_help = shell_output("#{bin}/cas_conformance_suite --help 2>&1")
     assert_match "cas_conformance_suite", conformance_help
