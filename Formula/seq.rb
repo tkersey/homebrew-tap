@@ -1,17 +1,17 @@
 class Seq < Formula
   desc "Zig CLI for mining Codex session and memory artifacts"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.3.3"
+  version "0.3.4"
   license "MIT"
 
   if OS.mac?
     depends_on arch: :arm64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-darwin-arm64.tar.gz"
-    sha256 "2de343eea5a9ab72c85759f302a1cc411a113ae09a1b50a4920fde832fa8d777"
+    sha256 "e6135040d301102067b8c3a45240345f3faf354de33a49b63a10fea396749ba9"
   else
     depends_on arch: :x86_64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-linux-x86_64.tar.gz"
-    sha256 "50148a58ab339f857a18d46e3e2f3cc2c32bdd0451366522a44ec81acaeb7b9d"
+    sha256 "f80aaf323c5eab4f99bb985e8935e568f8d2bdde157b8d4e185f7c400252b85d"
   end
 
   def install
@@ -121,6 +121,19 @@ class Seq < Formula
     assert_match "c3-mrpc", review_compiler_help
     assert_match "mbk", review_compiler_help
     assert_match "markdown|json", review_compiler_help
+
+    session_dir = testpath/"sessions/2026/05/13"
+    session_dir.mkpath
+    (session_dir/"rollout-c3-orphan.jsonl").write <<~JSONL
+      {"type":"session_meta","timestamp":"2026-05-13T12:00:00Z","payload":{"id":"c3-orphan-closed","cwd":"#{testpath}","model":"gpt-5"}}
+      {"type":"event_msg","timestamp":"2026-05-13T12:00:01Z","payload":{"type":"agent_message","turn_id":"x1","message":"MRPC-v1 minimal_review_patch_certificate\\nclosed"}}
+    JSONL
+    review_compiler_audit = shell_output(
+      "#{bin}/seq review-compiler-audit --root #{testpath}/sessions --protocol c3 --since 2026-05-13T00:00:00Z --until 2026-05-14T00:00:00Z --repo #{testpath} --format json",
+    )
+    assert_match "\"included_sessions\"", review_compiler_audit
+    assert_match "\"reason\": \"no_c3_begin_signal\"", review_compiler_audit
+    assert_match "\"summary_state\": \"CLOSED_UNCOMPRESSED\"", review_compiler_audit
 
     decision_capsule_help = shell_output("#{bin}/seq decision-capsule --help")
     assert_match "capsule|candidates|anchors|validate", decision_capsule_help
