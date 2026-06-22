@@ -58,6 +58,10 @@ class Seq < Formula
     assert_match "\"decision_anchor_v1\": true", capabilities
     assert_match "\"historical_decisions_dataset_v1\": true", capabilities
     assert_match "\"dcp_validation_v1\": true", capabilities
+    assert_match "\"review_compiler_provenance_v1\": true", capabilities
+    assert_match "\"review_compiler_run_ledger_v1\": true", capabilities
+    assert_match "\"source_governance_projection_v1\": true", capabilities
+    assert_match "\"c3_structured_closure_v1\": true", capabilities
 
     token_help = shell_output("#{bin}/seq token-usage --help")
     assert_match "--tz", token_help
@@ -120,7 +124,7 @@ class Seq < Formula
     assert_match "--protocol", review_compiler_help
     assert_match "c3-mrpc", review_compiler_help
     assert_match "mbk", review_compiler_help
-    assert_match "markdown|json", review_compiler_help
+    assert_match "table|json|jsonl|markdown", review_compiler_help
 
     session_dir = testpath/"sessions/2026/05/13"
     session_dir.mkpath
@@ -136,7 +140,9 @@ class Seq < Formula
     )
     assert_match "\"included_sessions\"", review_compiler_audit
     assert_match "\"reason\": \"no_c3_begin_signal\"", review_compiler_audit
-    assert_match "\"summary_state\": \"CLOSED_UNCOMPRESSED\"", review_compiler_audit
+    assert_match "\"state\": \"declared_uncontrolled\"", review_compiler_audit
+    assert_match "\"c3_closed\": false", review_compiler_audit
+    assert_match "\"summary_state\": \"NONE\"", review_compiler_audit
 
     decision_capsule_help = shell_output("#{bin}/seq decision-capsule --help")
     assert_match "capsule|candidates|anchors|validate", decision_capsule_help
