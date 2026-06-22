@@ -1,17 +1,17 @@
 class Seq < Formula
   desc "Zig CLI for mining Codex session and memory artifacts"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.3.5"
+  version "0.3.6"
   license "MIT"
 
   if OS.mac?
     depends_on arch: :arm64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-darwin-arm64.tar.gz"
-    sha256 "e02380aa7687a7db31b833e5cb56f4fc4f3d6b492c795fad667a12d30cb94d89"
+    sha256 "c868c53719650fbd7441b4534a52ac7997c2cda9ca60ade5f38a6caa55e65b51"
   else
     depends_on arch: :x86_64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-linux-x86_64.tar.gz"
-    sha256 "54ff5cd07a409c20e083ee04d4491a390869712e2ee84d61983d96bbcd6c19ad"
+    sha256 "5abb86636af289d6fc18c9d2c377274bf6aa1abf52f58a2ed5b59dc41e7dd941"
   end
 
   def install
@@ -140,6 +140,7 @@ class Seq < Formula
 
     decision_capsule_help = shell_output("#{bin}/seq decision-capsule --help")
     assert_match "capsule|candidates|anchors|validate", decision_capsule_help
+    assert_match "--thread-id", decision_capsule_help
     assert_match "--mode", decision_capsule_help
     assert_match "--format", decision_capsule_help
     assert_match "table|json|jsonl|csv|markdown", decision_capsule_help
