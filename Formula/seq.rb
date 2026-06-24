@@ -1,17 +1,17 @@
 class Seq < Formula
   desc "Zig CLI for mining Codex session and memory artifacts"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.3.10"
+  version "0.3.11"
   license "MIT"
 
   if OS.mac?
     depends_on arch: :arm64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-darwin-arm64.tar.gz"
-    sha256 "a783783956ec67abe6f4dfce78b673d76efc06a149bda26c02d4290d283d3b33"
+    sha256 "93fa4793eb22a8aa94a812ff9a0d3ffb70751a710028ce8b95908fec9be42172"
   else
     depends_on arch: :x86_64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-linux-x86_64.tar.gz"
-    sha256 "daa87bb392f051a46f8d9f6c80c337235eefa8f24289d1a3c84ab445b37e7c51"
+    sha256 "403cc3a8e245b2dddc2dd068fc48516ee699b31e16a22f1c682f7f2536f075b9"
   end
 
   def install
@@ -60,6 +60,14 @@ class Seq < Formula
     assert_match "\"dcp_validation_v1\": true", capabilities
     assert_match "\"review_compiler_provenance_v1\": true", capabilities
     assert_match "\"review_compiler_run_ledger_v1\": true", capabilities
+    assert_match "\"resolve_acceptance_contract_v2\": true", capabilities
+    assert_match "\"resolve_review_batch_v1\": true", capabilities
+    assert_match "\"resolve_review_aperture_v1\": true", capabilities
+    assert_match "\"resolve_counterexample_v1\": true", capabilities
+    assert_match "\"resolve_counterexample_basis_v2\": true", capabilities
+    assert_match "\"resolve_review_potential_v1\": true", capabilities
+    assert_match "\"resolve_intent_closed_audit_v1\": true", capabilities
+    assert_match "\"internal_context_not_success_v1\": true", capabilities
     assert_match "\"source_governance_projection_v1\": true", capabilities
     assert_match "\"c3_structured_closure_v1\": true", capabilities
 
