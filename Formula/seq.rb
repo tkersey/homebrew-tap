@@ -1,17 +1,17 @@
 class Seq < Formula
   desc "Zig CLI for mining Codex session and memory artifacts"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.3.11"
+  version "0.3.13"
   license "MIT"
 
   if OS.mac?
     depends_on arch: :arm64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-darwin-arm64.tar.gz"
-    sha256 "93fa4793eb22a8aa94a812ff9a0d3ffb70751a710028ce8b95908fec9be42172"
+    sha256 "66c9bd00daff2892ecb872dffdc710e7319ff2bd5b87bce190e0b9d9ce7f7330"
   else
     depends_on arch: :x86_64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-linux-x86_64.tar.gz"
-    sha256 "403cc3a8e245b2dddc2dd068fc48516ee699b31e16a22f1c682f7f2536f075b9"
+    sha256 "2cefdcacff1b356620bb6704e4d1c03f1236a3fc0ddb16dad21ed05af740613c"
   end
 
   def install
@@ -50,6 +50,7 @@ class Seq < Formula
     assert_match "skill-contract", help
     assert_match "skill-decision-receipt", help
     assert_match "decision-capsule", help
+    assert_match "execution-policy-audit", help
     assert_match "dataset-schema", help
     assert_match "query", help
 
@@ -70,6 +71,8 @@ class Seq < Formula
     assert_match "\"internal_context_not_success_v1\": true", capabilities
     assert_match "\"source_governance_projection_v1\": true", capabilities
     assert_match "\"c3_structured_closure_v1\": true", capabilities
+    assert_match "\"execution_policy_audit_v1\": true", capabilities
+    assert_match "\"policy_transition_dataset_v1\": true", capabilities
 
     token_help = shell_output("#{bin}/seq token-usage --help")
     assert_match "--tz", token_help
@@ -134,6 +137,10 @@ class Seq < Formula
     assert_match "mbk", review_compiler_help
     assert_match "table|json|jsonl|markdown", review_compiler_help
 
+    execution_policy_help = shell_output("#{bin}/seq execution-policy-audit --help")
+    assert_match "summary|runs|policies|transitions|calibration|regret|proof|report", execution_policy_help
+    assert_match "--policy-root", execution_policy_help
+
     session_dir = testpath/"sessions/2026/05/13"
     session_dir.mkpath
     (session_dir/"rollout-c3-orphan.jsonl").write <<~JSONL
@@ -168,5 +175,11 @@ class Seq < Formula
       "#{bin}/seq dataset-schema --dataset historical_decisions --format json",
     )
     assert_match "historical_decisions", historical_decisions_schema
+
+    execution_policy_schema = shell_output(
+      "#{bin}/seq dataset-schema --dataset execution_policy_transitions --format json",
+    )
+    assert_match "execution_policy_transitions", execution_policy_schema
+    assert_match "transition_audits", execution_policy_schema
   end
 end
