@@ -47,6 +47,22 @@ class Ledger < Formula
     assert_match "synesthesia", shell_output("#{bin}/ledger --help")
     assert_match "\"status\":\"missing\"", shell_output("#{bin}/ledger doctor --source synesthesia")
 
+    (testpath/"synesthesia.json").write <<~JSON
+      {"operation":"assert","authority":"explicit-user-endorsement","summary":"Endorse long corridor.","scope":{"kind":"task-family","repo":null,"paths":[]},"source_refs":[{"kind":"user","ref":"tap-test","summary":"User endorsed long corridor mapping."}],"related_ids":[],"supersedes_id":null,"payload":{"sensory_phrase":"long corridor","engineering_translation":"serialized waits","activation_boundary":"latency work","non_activation_boundary":"syntax","verification":"name the wait"}}
+    JSON
+    system bin/"ledger", "capture", "--source", "synesthesia",
+      "--kind", "mapping-endorsement", "--json", testpath/"synesthesia.json"
+    assert_path_exists testpath/".ledger/synesthesia/events.jsonl"
+    synesthesia_recent = shell_output("#{bin}/ledger recent --source synesthesia --limit 1")
+    assert_match "long corridor", synesthesia_recent
+    synesthesia_id = synesthesia_recent[/SYN-[^ ]+/]
+    assert_match "SYN-", synesthesia_id
+    synesthesia_export = shell_output(
+      "#{bin}/ledger export --source synesthesia --format memory-note --id #{synesthesia_id}",
+    )
+    assert_match "\"operation\":\"assert\"", synesthesia_export
+    refute_match "logical_kind", synesthesia_export
+
     system bin/"ledger", "capture", "--source", "learnings",
       "--status", "do_more",
       "--learning",
