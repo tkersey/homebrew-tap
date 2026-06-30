@@ -48,10 +48,11 @@ class Ledger < Formula
     system bin/"ledger", "capture", "--source", "learnings",
       "--status", "do_more",
       "--learning",
-      "When tap tests install ledger, capture a learning event because formula coverage prevents source regressions.",
+      "When tap tests install ledger, use ledger capture --source learnings because formula tests catch regressions.",
       "--evidence", "command: brew test ledger writes .ledger/learnings/events.jsonl",
       "--application", "Keep ledger --source learnings covered in the formula test.",
-      "--tag", "homebrew"
+      "--tag", "homebrew",
+      "--allow-temp-path"
     assert_path_exists testpath/".ledger/learnings/events.jsonl"
     recent = shell_output("#{bin}/ledger recent --source learnings --limit 1")
     assert_match "tap tests install ledger", recent
