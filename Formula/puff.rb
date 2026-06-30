@@ -1,15 +1,15 @@
 class Puff < Formula
   desc "Zig CLI for Codex cloud task orchestration"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.1.7"
+  version "0.1.9"
   license "MIT"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/puff-v#{version}/puff-v#{version}-darwin-arm64.tar.gz"
-    sha256 "856fb1d7ba06d6f66a7917c82607053910558dc6bb72e245c80c1a6b0126997a"
+    sha256 "f33b822361675dc3b3bed8073fbb43a6b6388e9bbf0a6a2e993c66466f6b8b45"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/puff-v#{version}/puff-v#{version}-linux-x86_64.tar.gz"
-    sha256 "5aeb1694a451601fd4ccb02be77e5afa7e568ae010cb6a7c02f8bc5a6a07f43f"
+    sha256 "c798101eda94c78c45fbd8f5cefc2a95867607488c6af9cb1cba3c43d97402f5"
   end
 
   on_macos do

@@ -1,15 +1,15 @@
 class ParseArch < Formula
   desc "Zig CLI for repository architecture signal collection"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.2.0"
+  version "0.2.2"
   license "MIT"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/parse-arch-v#{version}/parse-arch-v#{version}-darwin-arm64.tar.gz"
-    sha256 "435b869c806b87fa28f429d717beafce97b1813ed902b6c04a03b5fa497fbd17"
+    sha256 "34bff12834e47a93a95a3de591cc87c919e988a745190d6ff05f80829934e61c"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/parse-arch-v#{version}/parse-arch-v#{version}-linux-x86_64.tar.gz"
-    sha256 "d10e9826a96aa045d81d43e03a225365322782e7bf2e16f43d151f0556a8902d"
+    sha256 "3ae8f6f7bb8d6bb349a8043065b4ca56fc6e75552b108f4e60a74e4b2b3a8ddc"
   end
 
   on_macos do
