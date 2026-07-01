@@ -1,14 +1,14 @@
 class Cas < Formula
   desc "Zig CLI helpers for Codex app-server orchestration"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.2.55"
+  version "0.2.56"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-darwin-arm64.tar.gz"
-    sha256 "45fa619e556691cc075c0c8a4819ac57b1e4ae88eb63054ef9bb67384b5995da"
+    sha256 "9fd6215258967abe80406416dcfe7d3b3ea61a6e8208743e2954f1f7fb5d5fdd"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-linux-x86_64.tar.gz"
-    sha256 "718d7790303c719cdcfe85bba3683a727ec27e0b074a6195f918bdc62214c752"
+    sha256 "273b981614aab28f6e0a1a14fc70b10d5a1150ec03a5a7c7ec578542a8d5eeb5"
   end
 
   on_macos do
@@ -61,6 +61,7 @@ class Cas < Formula
     review_help = shell_output("#{bin}/cas_review_session --help 2>&1")
     assert_match "cas_review_session", review_help
     assert_match "Actions:", review_help
+    assert_match "run", review_help
     assert_match "receipt", review_help
     assert_match "--verdict-only", review_help
     assert_match "--multi-agent-mode", review_help
