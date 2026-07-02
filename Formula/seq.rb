@@ -1,17 +1,17 @@
 class Seq < Formula
   desc "Zig CLI for mining Codex session and memory artifacts"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.3.36"
+  version "0.3.37"
   license "MIT"
 
   if OS.mac?
     depends_on arch: :arm64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-darwin-arm64.tar.gz"
-    sha256 "0d802bf50f970240dab9e4517070ae97c2f5d6ab091a18a0fc46777b5bc1759c"
+    sha256 "6a47ae70ce02e88404710579b1769814f907717a6af7645e78995c4d770b83b0"
   else
     depends_on arch: :x86_64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-linux-x86_64.tar.gz"
-    sha256 "c5f8178d525181b752a766018df775325f90cda5ba41216fa2f5cf58c60e2220"
+    sha256 "0075a6216e4fe6587881fd2ff2899b45c7a71315c944db6753aa726a8b131a15"
   end
 
   def install
@@ -55,6 +55,7 @@ class Seq < Formula
     assert_match "query", help
 
     capabilities = shell_output("#{bin}/seq capabilities --format json")
+    assert_match "\"actuation_hylo_audit_v1\": true", capabilities
     assert_match "\"decision_capsule_v1\": true", capabilities
     assert_match "\"decision_anchor_v1\": true", capabilities
     assert_match "\"historical_decisions_dataset_v1\": true", capabilities
@@ -140,6 +141,9 @@ class Seq < Formula
     execution_policy_help = shell_output("#{bin}/seq execution-policy-audit --help")
     assert_match "summary|runs|policies|transitions|calibration|regret|proof|report", execution_policy_help
     assert_match "--policy-root", execution_policy_help
+
+    actuation_audit_help = shell_output("#{bin}/seq actuation-audit --help")
+    assert_match "summary|runs|slices|proof|compactions|decisions|hylo|report", actuation_audit_help
 
     session_dir = testpath/"sessions/2026/05/13"
     session_dir.mkpath
