@@ -1,17 +1,17 @@
 class Seq < Formula
   desc "Zig CLI for mining Codex session and memory artifacts"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.3.39"
+  version "0.3.40"
   license "MIT"
 
   if OS.mac?
     depends_on arch: :arm64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-darwin-arm64.tar.gz"
-    sha256 "075a4755fc5ef5210366d258da33c38cc499f63aa88e6c7d11bf5c600940cf89"
+    sha256 "718815ced1e4d9cf6966d8f5ee96ddff6f6b7d3a1643cbc7a8ddd9f6e2ea15f2"
   else
     depends_on arch: :x86_64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-linux-x86_64.tar.gz"
-    sha256 "b08a638d0425f6ba02acb875fc7dc890e501779d02ad868afa34433f1e80812d"
+    sha256 "84674583e3f35258fe71829fc534b8f6251d77197e449b1e96e4480f17b3fda3"
   end
 
   def install
@@ -144,6 +144,21 @@ class Seq < Formula
 
     actuation_audit_help = shell_output("#{bin}/seq actuation-audit --help")
     assert_match "summary|runs|slices|proof|compactions|decisions|hylo|report", actuation_audit_help
+
+    hylo_fixture = testpath/"hylo-resolve.jsonl"
+    hylo_fixture.write <<~JSONL
+      {"type":"session_meta","timestamp":"2026-07-02T13:10:00Z","payload":{"id":"resolve_without_review_fold","cwd":"#{testpath}","model":"gpt-5","git":{"branch":"feature/hylo","commit_hash":"head-resolve-no-fold"}}}
+      {"type":"event_msg","timestamp":"2026-07-02T13:10:01Z","payload":{"type":"task_started","turn_id":"t1"}}
+      {"type":"event_msg","timestamp":"2026-07-02T13:10:02Z","payload":{"type":"user_message","turn_id":"t1","message":"$actuating resolve without review-fold fixture."}}
+      {"type":"event_msg","timestamp":"2026-07-02T13:10:03Z","payload":{"type":"agent_message","turn_id":"t1","message":"$cas review\\nreview finding: accepted liability\\nagent_loop_scheme_receipt:\\n  receipt_version: ALSR-v1\\nactuation_hylomorphism:\\n  machine_version: HYL-v1\\nhylo_step_receipt:\\n  receipt_version: HSR-v1\\n  unfold:\\n    produced: work_node\\n  action:\\n    effect: edit\\n  fold:\\n    verdict: complete\\n    current_artifact_bound: yes\\n  stop_rule:\\n    success: done\\nATCG-v1:\\n  can_mark_goal_complete: yes"}}
+      {"type":"response_item","timestamp":"2026-07-02T13:10:04Z","payload":{"type":"function_call","name":"apply_patch","call_id":"patch-1","arguments":"*** Begin Patch\\n*** Update File: resolve_no_fold.txt\\n+bad\\n*** End Patch"}}
+      {"type":"response_item","timestamp":"2026-07-02T13:10:05Z","payload":{"type":"function_call_output","call_id":"patch-1","output":"Success. Updated the following files:\\nM resolve_no_fold.txt\\n"}}
+      {"type":"event_msg","timestamp":"2026-07-02T13:10:06Z","payload":{"type":"task_complete","turn_id":"t1","duration_ms":5000}}
+    JSONL
+    hylo_audit = shell_output("#{bin}/seq actuation-audit --path #{hylo_fixture} --mode hylo --format json")
+    assert_match "\"resolve_without_review_fold\": 1", hylo_audit
+    refute_match "review_fix_without_review_fold", hylo_audit
+    refute_match "ship_without_terminal_publication_boundary", hylo_audit
 
     session_dir = testpath/"sessions/2026/05/13"
     session_dir.mkpath
