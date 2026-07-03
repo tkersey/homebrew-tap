@@ -1,17 +1,17 @@
 class Seq < Formula
   desc "Zig CLI for mining Codex session and memory artifacts"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.3.37"
+  version "0.3.38"
   license "MIT"
 
   if OS.mac?
     depends_on arch: :arm64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-darwin-arm64.tar.gz"
-    sha256 "6a47ae70ce02e88404710579b1769814f907717a6af7645e78995c4d770b83b0"
+    sha256 "31b0220fdbea55f21de592eb2c7f8c2e1d88a22953e7181518b070ef6c470d3c"
   else
     depends_on arch: :x86_64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-linux-x86_64.tar.gz"
-    sha256 "0075a6216e4fe6587881fd2ff2899b45c7a71315c944db6753aa726a8b131a15"
+    sha256 "4d0c1785437c0bc78886987d527669944231badf82c8bc23db597881d7b263a2"
   end
 
   def install
