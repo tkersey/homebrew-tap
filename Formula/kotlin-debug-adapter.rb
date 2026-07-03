@@ -5,11 +5,11 @@ class KotlinDebugAdapter < Formula
   sha256 "67158aa0bb8b0e00990895a53193c44aee9291828fe7c426df631975299cdae6"
   license "MIT"
 
-  depends_on "gradle" => :build
-  depends_on "openjdk"
+  depends_on "gradle@8" => :build
+  depends_on "openjdk@11"
 
   def install
-    ENV["JAVA_HOME"] = Language::Java.java_home
+    ENV["JAVA_HOME"] = Language::Java.java_home("11")
     #  Remove Windows files
     rm "gradlew.bat"
 
@@ -18,11 +18,11 @@ class KotlinDebugAdapter < Formula
     libexec.install Dir["adapter/build/install/adapter/*"]
 
     (bin/"kotlin-debug-adapter").write_env_script libexec/"bin/kotlin-debug-adapter",
-      Language::Java.overridable_java_home_env
+      Language::Java.overridable_java_home_env("11")
   end
 
   test do
-    output = pipe_output("#{bin}/kotlin-debug-adapter", "", 0)
+    output = pipe_output(bin/"kotlin-debug-adapter", "", 0)
 
     assert_match(/^Content-Length: \d+/i, output)
   end
