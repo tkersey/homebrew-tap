@@ -1,15 +1,15 @@
 class St < Formula
   desc "Zig CLI for dependency-aware durable task plans"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.5.6"
+  version "0.5.7"
   license "MIT"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/st-v#{version}/st-v#{version}-darwin-arm64.tar.gz"
-    sha256 "d24aed837b22725037db2f468e2aced8677e10bfb04f6bb21d41f946c804339e"
+    sha256 "050471882f849adf70e700f1a09c1795cf0fb664794eff3c2be45d38cf03c7ab"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/st-v#{version}/st-v#{version}-linux-x86_64.tar.gz"
-    sha256 "bd4a357eef09e1b4697e623dc29de3435e23a76e2c3149f9b702b09bfaff6e31"
+    sha256 "4826c85ad52f0ac14c177cbc3a4745d5c4d2da9bcdf776b45a6fba3cbe2e2cbc"
   end
 
   on_macos do
