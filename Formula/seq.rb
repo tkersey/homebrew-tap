@@ -156,7 +156,7 @@ class Seq < Formula
       {"type":"event_msg","timestamp":"2026-07-02T13:10:06Z","payload":{"type":"task_complete","turn_id":"t1","duration_ms":5000}}
     JSONL
     hylo_audit = shell_output("#{bin}/seq actuation-audit --path #{hylo_fixture} --mode hylo --format json")
-    assert_match "\"resolve_without_review_fold\": 1", hylo_audit
+    assert_match "\"resolve_without_review_fold\":1", hylo_audit
     refute_match "review_fix_without_review_fold", hylo_audit
     refute_match "ship_without_terminal_publication_boundary", hylo_audit
 
