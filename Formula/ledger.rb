@@ -1,15 +1,15 @@
 class Ledger < Formula
   desc "Zig CLI for repo-local durable source-memory ledgers"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.3.4"
+  version "0.3.5"
   license "MIT"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-darwin-arm64.tar.gz"
-    sha256 "32787e82df539939709a761a451e03f2ad703b502f4538257a63032a986d8984"
+    sha256 "ab78116670b2da9c41b60c22a8fbe99cd290fabdbe7e4297eb3603b2a878e52c"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-linux-x86_64.tar.gz"
-    sha256 "7ae7a746db4e2e7a94823a52d530626d8752f4f4e60b2fc4528d213aba98f0c0"
+    sha256 "4679613e16e568c32c9fbc5564448bdbb6bdd43df0c087ae623b02d02ae946d0"
   end
 
   on_macos do
