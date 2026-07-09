@@ -1,15 +1,15 @@
 class MemoryNote < Formula
   desc "Safe append-only custom Codex memory-source note writer"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.1.7"
+  version "0.1.8"
   license "MIT"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/memory-note-v#{version}/memory-note-v#{version}-darwin-arm64.tar.gz"
-    sha256 "c5298b9319f1d3a1235c4ce057102c3aee184586f3fc84e2fd9ea6922f752245"
+    sha256 "c8d31cf1030fe24f63c117c136378781ec8044827965785eae28aa3670d460f0"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/memory-note-v#{version}/memory-note-v#{version}-linux-x86_64.tar.gz"
-    sha256 "0e78d9317d62717e755c6f80efc473d2c536e129b6211d775f28586a852170f9"
+    sha256 "2aebd4851ede85d3ade3a1a7e37aa9c6ad7a0c9f9d47159a1ab3611247a94218"
   end
 
   on_macos do
