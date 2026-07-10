@@ -1,14 +1,14 @@
 class Cas < Formula
   desc "Zig CLI helpers for Codex app-server orchestration"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.2.72"
+  version "0.2.73"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-darwin-arm64.tar.gz"
-    sha256 "dc69cb97d5263ea7defd57f090539e3824030a11373d1d5a665308b632647361"
+    sha256 "4d93f6c84d69db45411878a943da18d32c9a66ccd5651ff6d2e2d98387dd41f6"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-linux-x86_64.tar.gz"
-    sha256 "42e0c0d9fe7b5036b5c926aaa239bb5ac921dfa274fb5f7d061d6caafb21e867"
+    sha256 "a41768f7b91b388cc6219e35b43953fc213ec52268474aa3c545efd507822d7f"
   end
 
   on_macos do
@@ -65,6 +65,9 @@ class Cas < Formula
     assert_match "receipt", review_help
     assert_match "--verdict-only", review_help
     assert_match "--multi-agent-mode", review_help
+    assert_match "--workflow-binding-json", review_help
+    assert_match "--workflow-binding-json", shell_output("#{bin}/cas review_session --help 2>&1")
+    assert_match "\"cas_rer_workflow_binding_v1\": true", shell_output("#{bin}/cas capabilities --json")
 
     inquiry_help = shell_output("#{bin}/cas_session_inquiry --help 2>&1")
     assert_match "cas_session_inquiry", inquiry_help
