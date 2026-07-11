@@ -1,15 +1,15 @@
 class Ledger < Formula
-  desc "Zig CLI for repo-local ledgers and governance validation"
+  desc "Zig CLI for repo-local ledgers, plan addresses, and governance validation"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.4.0"
+  version "0.5.0"
   license "MIT"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-darwin-arm64.tar.gz"
-    sha256 "f552695f036ce6c5928243017339d4883e185e57fe15c489612643af4665391d"
+    sha256 "144d00790236423de148cda8220e1334b2a001f47d4856a9c17f63cbd4c2d08a"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-linux-x86_64.tar.gz"
-    sha256 "67dff815b80b3bdafee2064b73c4229791eedb9357b7317adfc65d1f7773f98c"
+    sha256 "403d819ae06208ce39282cb13c1492ba8c382ac2b76ae1c78f78efba97d92fd9"
   end
 
   on_macos do
@@ -29,7 +29,7 @@ class Ledger < Formula
     assert_match version.to_s, version_output
 
     help = shell_output("#{bin}/ledger --help")
-    assert_match "Durable source-memory and actuation ledger.", help
+    assert_match "Durable source-memory, actuation, and plan ledger.", help
     assert_match "capture", help
     assert_match "map", help
     assert_match "migrate", help
@@ -94,6 +94,35 @@ class Ledger < Formula
     assert_match "one causal actuation-kernel transition", actuation_help
     assert_match "prepare", actuation_help
     assert_match "decide", actuation_help
+
+    universalist_help = shell_output("#{bin}/ledger --source universalist --help")
+    assert_match "collision-safe Universalist plan artifacts", universalist_help
+    assert_match "create", universalist_help
+    assert_match "latest", universalist_help
+    assert_match "path", universalist_help
+
+    system "git", "init", "-q"
+    (testpath/"universalist-plan.md").write "# Universalist Plan\n\n## Status: planned\n"
+    first_plan = shell_output(
+      "#{bin}/ledger create --source universalist --repo #{testpath} --template #{testpath}/universalist-plan.md",
+    )
+    second_plan = shell_output(
+      "#{bin}/ledger create --source universalist --repo #{testpath} --template #{testpath}/universalist-plan.md",
+    )
+    first_id = first_plan[/"plan_id":"([^"]+)"/, 1]
+    second_id = second_plan[/"plan_id":"([^"]+)"/, 1]
+    first_path = first_plan[/"path":"([^"]+)"/, 1]
+    second_path = second_plan[/"path":"([^"]+)"/, 1]
+    refute_equal first_id, second_id
+    refute_equal first_path, second_path
+    assert_path_exists first_path
+    assert_path_exists second_path
+    assert_equal second_path, shell_output(
+      "#{bin}/ledger latest --source universalist --repo #{testpath} --format path",
+    ).strip
+    assert_equal first_path, shell_output(
+      "#{bin}/ledger path --source universalist --repo #{testpath} --id #{first_id}",
+    ).strip
 
     system bin/"ledger", "init"
     assert_path_exists testpath/".ledger/negative-ledger/events.jsonl"
