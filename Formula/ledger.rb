@@ -1,15 +1,15 @@
 class Ledger < Formula
   desc "Zig CLI for repo-local ledgers, plan addresses, and governance validation"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.5.0"
+  version "0.5.1"
   license "MIT"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-darwin-arm64.tar.gz"
-    sha256 "144d00790236423de148cda8220e1334b2a001f47d4856a9c17f63cbd4c2d08a"
+    sha256 "547700ab38edfa753ce9acc78ff18485c60cbede6c78637441b478965ccf411e"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-linux-x86_64.tar.gz"
-    sha256 "403d819ae06208ce39282cb13c1492ba8c382ac2b76ae1c78f78efba97d92fd9"
+    sha256 "a109a3d47da01e3285c7f91d1cfe8a2388aaa0257ce1f92d017b28b278c0614f"
   end
 
   on_macos do
@@ -102,6 +102,7 @@ class Ledger < Formula
     assert_match "path", universalist_help
 
     system "git", "init", "-q"
+    (testpath/".gitignore").write ".ledger/\n"
     (testpath/"universalist-plan.md").write "# Universalist Plan\n\n## Status: planned\n"
     first_plan = shell_output(
       "#{bin}/ledger create --source universalist --repo #{testpath} --template #{testpath}/universalist-plan.md",
