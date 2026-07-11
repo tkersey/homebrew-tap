@@ -1,15 +1,15 @@
 class Ledger < Formula
-  desc "Zig CLI for repo-local durable source-memory ledgers"
+  desc "Zig CLI for repo-local ledgers and governance validation"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.3.5"
+  version "0.4.0"
   license "MIT"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-darwin-arm64.tar.gz"
-    sha256 "ab78116670b2da9c41b60c22a8fbe99cd290fabdbe7e4297eb3603b2a878e52c"
+    sha256 "f552695f036ce6c5928243017339d4883e185e57fe15c489612643af4665391d"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-linux-x86_64.tar.gz"
-    sha256 "4679613e16e568c32c9fbc5564448bdbb6bdd43df0c087ae623b02d02ae946d0"
+    sha256 "67dff815b80b3bdafee2064b73c4229791eedb9357b7317adfc65d1f7773f98c"
   end
 
   on_macos do
@@ -29,7 +29,7 @@ class Ledger < Formula
     assert_match version.to_s, version_output
 
     help = shell_output("#{bin}/ledger --help")
-    assert_match "Durable source-memory ledger.", help
+    assert_match "Durable source-memory and actuation ledger.", help
     assert_match "capture", help
     assert_match "map", help
     assert_match "migrate", help
@@ -37,6 +37,63 @@ class Ledger < Formula
     assert_match "recall", help
     assert_match "status", help
     assert_match "export", help
+
+    validate_help = shell_output("#{bin}/ledger validate --help")
+    assert_match "plan-source-contract", validate_help
+    assert_match "policy-synthesis-receipt", validate_help
+    assert_match "review-fold", validate_help
+    assert_match "never reads or writes .ledger", validate_help
+
+    (testpath/"plan-source-contract.json").write <<~JSON
+      {
+        "plan_source_contract": {
+          "contract_version": "PSC-v1",
+          "source_owner": "spec-pipeline",
+          "spec_id": "tap-test",
+          "implementation_spec": {"ref": "tap-test"},
+          "decision_packet": {"ref": "tap-test"},
+          "proof_bar": {"command": "ledger --version"},
+          "target_branch": "main",
+          "do_not_execute_before": [],
+          "sgr_v2": {
+            "spec_governance_receipt": {
+              "receipt_version": "SGR-v2",
+              "mode": "full",
+              "status": "complete",
+              "lane": "spec_to_plan",
+              "gate": {
+                "plan_allowed": "yes",
+                "material_open_questions_remaining": "no"
+              },
+              "lint": {
+                "verdict": "pass",
+                "blocked_handoff": "no"
+              },
+              "execution_handoff": {
+                "ready_for_plan": "yes",
+                "next_owner": "$plan",
+                "do_not_execute_before": []
+              },
+              "auto_plan_handoff": {
+                "eligible": "yes",
+                "invocation": "same_turn_tail_call"
+              }
+            }
+          }
+        }
+      }
+    JSON
+    validation = shell_output(
+      "#{bin}/ledger validate plan-source-contract --input #{testpath}/plan-source-contract.json",
+    )
+    assert_match '"verdict":"pass"', validation
+    assert_match '"authority_granted":false', validation
+    assert_match '"storage_mutated":false', validation
+
+    actuation_help = shell_output("#{bin}/ledger --source actuation --help")
+    assert_match "one causal actuation-kernel transition", actuation_help
+    assert_match "prepare", actuation_help
+    assert_match "decide", actuation_help
 
     system bin/"ledger", "init"
     assert_path_exists testpath/".ledger/negative-ledger/events.jsonl"
