@@ -185,7 +185,7 @@ class Ledger < Formula
     assert_match "\"ok\":true", shell_output("#{bin}/ledger doctor")
 
     capture_help = shell_output("#{bin}/ledger capture --source learnings --help 2>&1")
-    assert_match "Append a structured learning event to repo-local .ledger/learnings/events.jsonl.", capture_help
+    assert_match "repo-local learning-source API", capture_help
 
     legacy_repo = testpath/"legacy-repo"
     legacy_repo.mkpath
