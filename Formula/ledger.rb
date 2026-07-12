@@ -1,15 +1,15 @@
 class Ledger < Formula
   desc "CLI for repo-local ledgers, plan addresses, and artifact validation"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.7.1"
+  version "0.7.2"
   license "MIT"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-darwin-arm64.tar.gz"
-    sha256 "09d312c85a5a264a3a93076e5d7e3604d2856731da6a56de41027aadbd7f6350"
+    sha256 "64b8bb8081c048de5c6f3d77734a6d5074f5babf1a5c26ba9a1bb6b9e5c2bb7a"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-linux-x86_64.tar.gz"
-    sha256 "f1986fb2e890dbae5a562f54f51108874012f852d10af85599c7908e16df703c"
+    sha256 "364e3974cbbaa1323ecea545056bfce16cc33de2886b0e98470a1fdb0b5e8457"
   end
 
   on_macos do
