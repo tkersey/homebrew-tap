@@ -1,15 +1,15 @@
 class Ledger < Formula
   desc "CLI for repo-local ledgers, plan addresses, and artifact validation"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.6.0"
+  version "0.6.1"
   license "MIT"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-darwin-arm64.tar.gz"
-    sha256 "55249cc0170eac4bbbb158693a0d73fa7227fb10cb703306f7ecb9cc72aba00e"
+    sha256 "cfbc08582611a8b7a414745727e03e44cab47adaf785cf12199e0ce49fa9f23f"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-linux-x86_64.tar.gz"
-    sha256 "838a43ff3e3c26eadb155de0b7025fa1ef7355a6eac9231d1e82ecbc0d6bb0d0"
+    sha256 "7663a46677d9664f975df5a603c7bb96ff7e98acbac8e5746c8f0975bcf35ac2"
   end
 
   on_macos do
@@ -145,6 +145,7 @@ class Ledger < Formula
     hylo_help = shell_output("#{bin}/ledger --source hylo --help")
     assert_match "portable replay-campaign validation", hylo_help
     assert_match "validate-campaign", hylo_help
+    assert_match "snapshot-target", hylo_help
     assert_match "progress", hylo_help
 
     universalist_help = shell_output("#{bin}/ledger --source universalist --help")
