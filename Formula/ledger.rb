@@ -1,15 +1,15 @@
 class Ledger < Formula
   desc "CLI for repo-local ledgers, plan addresses, and artifact validation"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.6.1"
+  version "0.7.0"
   license "MIT"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-darwin-arm64.tar.gz"
-    sha256 "cfbc08582611a8b7a414745727e03e44cab47adaf785cf12199e0ce49fa9f23f"
+    sha256 "54d92178a98f350306d1afdb1827b0548ac33cbf22ae25557596e2d61fa9e788"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-linux-x86_64.tar.gz"
-    sha256 "7663a46677d9664f975df5a603c7bb96ff7e98acbac8e5746c8f0975bcf35ac2"
+    sha256 "27f52a5e539a3a071913f4cb0fe18500089414d7811ec6271ee9b67e1bd06995"
   end
 
   on_macos do
@@ -37,6 +37,9 @@ class Ledger < Formula
     assert_match "recall", help
     assert_match "status", help
     assert_match "export", help
+    assert_match "lifecycle-transition proof JSON", help
+    assert_match "--route-family ID", help
+    assert_match "--proof-pattern ID", help
 
     validate_help = shell_output("#{bin}/ledger validate --help")
     assert_match "plan-source-contract", validate_help
