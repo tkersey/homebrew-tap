@@ -1,15 +1,15 @@
 class Ledger < Formula
   desc "Zig CLI for repo-local ledgers, plan addresses, and governance validation"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.5.2"
+  version "0.5.3"
   license "MIT"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-darwin-arm64.tar.gz"
-    sha256 "337c39b65fbd38ce6b15cb42a30ccdda55aae1945c0a32b69572a165659cd482"
+    sha256 "e19b748dd4f05be04d1117844870690e31827d9fe288e179bcc2197cd2452b41"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-linux-x86_64.tar.gz"
-    sha256 "aaf068ed609d0fd17a65d08da5e118bf3d77e92a27c30b155238b8955e0cf389"
+    sha256 "fb391e287513c5e6db052141ade7b1cd0a14c550af481323c5fa960c2481cc6b"
   end
 
   on_macos do
@@ -116,6 +116,8 @@ class Ledger < Formula
     second_path = second_plan[/"path":"([^"]+)"/, 1]
     refute_equal first_id, second_id
     refute_equal first_path, second_path
+    assert_equal (testpath/".ledger/universalist/plan-#{first_id}.md").to_s, first_path
+    assert_equal (testpath/".ledger/universalist/plan-#{second_id}.md").to_s, second_path
     assert_path_exists first_path
     assert_path_exists second_path
     assert_equal second_path, shell_output(
