@@ -1,15 +1,15 @@
 class Ledger < Formula
   desc "Zig CLI for repo-local ledgers, plan addresses, and governance validation"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.5.1"
+  version "0.5.2"
   license "MIT"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-darwin-arm64.tar.gz"
-    sha256 "547700ab38edfa753ce9acc78ff18485c60cbede6c78637441b478965ccf411e"
+    sha256 "337c39b65fbd38ce6b15cb42a30ccdda55aae1945c0a32b69572a165659cd482"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-linux-x86_64.tar.gz"
-    sha256 "a109a3d47da01e3285c7f91d1cfe8a2388aaa0257ce1f92d017b28b278c0614f"
+    sha256 "aaf068ed609d0fd17a65d08da5e118bf3d77e92a27c30b155238b8955e0cf389"
   end
 
   on_macos do
@@ -131,6 +131,38 @@ class Ledger < Formula
 
     capture_help = shell_output("#{bin}/ledger capture --source learnings --help 2>&1")
     assert_match "Append a structured learning event to repo-local .ledger/learnings/events.jsonl.", capture_help
+
+    legacy_repo = testpath/"legacy-repo"
+    legacy_repo.mkpath
+    system "git", "-C", legacy_repo, "init", "-q"
+    (legacy_repo/".gitignore").write ".ledger/\n"
+    (legacy_repo/".learnings.jsonl").write <<~JSONL
+      {"id":"lrn-old-1","status":"do_more","learning":"Keep valid legacy records."}
+      {"id":"lrn-old-2","status":"do_more","fingerprint":"fp",
+      tags":["migration"]}
+      ags":["orphan"]}
+    JSONL
+    legacy_doctor = shell_output(
+      "cd #{legacy_repo} && #{bin}/ledger doctor --source learnings",
+      1,
+    )
+    assert_match '"status":"invalid"', legacy_doctor
+    assert_match '"repaired_records":1', legacy_doctor
+    assert_match '"invalid_records":1', legacy_doctor
+    migration = shell_output(
+      "cd #{legacy_repo} && #{bin}/ledger migrate --source learnings --mode copy --invalid-policy skip",
+    )
+    assert_match '"status":"migrated_with_skips"', migration
+    assert_match '"records":2', migration
+    assert_match '"repaired_records":1', migration
+    assert_match '"skipped_records":1', migration
+    assert_match '"legacy_left_in_place":true', migration
+    assert_path_exists legacy_repo/".learnings.jsonl"
+    assert_path_exists legacy_repo/".ledger/learnings/events.jsonl"
+    assert_match '"status":"current"', shell_output(
+      "cd #{legacy_repo} && #{bin}/ledger doctor --source learnings",
+    )
+
     assert_match "synesthesia", shell_output("#{bin}/ledger --help")
     assert_match "\"status\":\"missing\"", shell_output("#{bin}/ledger doctor --source synesthesia")
 
