@@ -1,15 +1,15 @@
 class Ledger < Formula
-  desc "Zig CLI for repo-local ledgers, plan addresses, and governance validation"
+  desc "CLI for repo-local ledgers, plan addresses, and artifact validation"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.5.3"
+  version "0.6.0"
   license "MIT"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-darwin-arm64.tar.gz"
-    sha256 "e19b748dd4f05be04d1117844870690e31827d9fe288e179bcc2197cd2452b41"
+    sha256 "55249cc0170eac4bbbb158693a0d73fa7227fb10cb703306f7ecb9cc72aba00e"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-linux-x86_64.tar.gz"
-    sha256 "fb391e287513c5e6db052141ade7b1cd0a14c550af481323c5fa960c2481cc6b"
+    sha256 "838a43ff3e3c26eadb155de0b7025fa1ef7355a6eac9231d1e82ecbc0d6bb0d0"
   end
 
   on_macos do
@@ -29,7 +29,7 @@ class Ledger < Formula
     assert_match version.to_s, version_output
 
     help = shell_output("#{bin}/ledger --help")
-    assert_match "Durable source-memory, actuation, and plan ledger.", help
+    assert_match "Durable source-memory, actuation, replay, and plan ledger.", help
     assert_match "capture", help
     assert_match "map", help
     assert_match "migrate", help
@@ -42,7 +42,54 @@ class Ledger < Formula
     assert_match "plan-source-contract", validate_help
     assert_match "policy-synthesis-receipt", validate_help
     assert_match "review-fold", validate_help
+    assert_match "actuation-review-policy", validate_help
+    assert_match "review-resolution", validate_help
     assert_match "never reads or writes .ledger", validate_help
+
+    (testpath/"review-resolution.json").write <<~JSON
+      {
+        "review_resolution": {
+          "version": "review-resolution/v1",
+          "resolution_id": "tap-smoke",
+          "run_id": "run-smoke",
+          "review_folds": [
+            {
+              "version": "RF-v2",
+              "findings": [],
+              "compression": {"equivalence_classes": []}
+            }
+          ],
+          "finding_ids": [],
+          "decisions": [],
+          "outcome": {
+            "status": "clean",
+            "semantic_balance": {
+              "uncovered_liabilities": [],
+              "required_retirements": [],
+              "completed_retirements": [],
+              "dominated_remaining": []
+            }
+          }
+        }
+      }
+    JSON
+    resolution_validation = shell_output(
+      "#{bin}/ledger validate review-resolution --phase closeout --input #{testpath}/review-resolution.json",
+    )
+    assert_match '"schema":"actuating-review-resolution-decision/v1"', resolution_validation
+    assert_match '"verdict":"pass"', resolution_validation
+    assert_match '"authority_granted":false', resolution_validation
+    assert_match '"storage_mutated":false', resolution_validation
+
+    (testpath/"malformed-policy.json").write "{}\n"
+    policy_validation = shell_output(
+      "#{bin}/ledger validate actuation-review-policy --phase preflight --input #{testpath}/malformed-policy.json",
+      2,
+    )
+    assert_match '"schema":"actuation-review-policy-decision/v1"', policy_validation
+    assert_match '"verdict":"blocked"', policy_validation
+    assert_match '"authority_granted":false', policy_validation
+    assert_match '"storage_mutated":false', policy_validation
 
     (testpath/"plan-source-contract.json").write <<~JSON
       {
@@ -94,6 +141,11 @@ class Ledger < Formula
     assert_match "one causal actuation-kernel transition", actuation_help
     assert_match "prepare", actuation_help
     assert_match "decide", actuation_help
+
+    hylo_help = shell_output("#{bin}/ledger --source hylo --help")
+    assert_match "portable replay-campaign validation", hylo_help
+    assert_match "validate-campaign", hylo_help
+    assert_match "progress", hylo_help
 
     universalist_help = shell_output("#{bin}/ledger --source universalist --help")
     assert_match "collision-safe Universalist plan artifacts", universalist_help
