@@ -1,14 +1,14 @@
 class Cas < Formula
   desc "Zig CLI helpers for Codex app-server orchestration"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.2.74"
+  version "0.2.75"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-darwin-arm64.tar.gz"
-    sha256 "1fc25b8cc5a43650bccc4770d756c31829dad16911099dde6999a427d5638e2b"
+    sha256 "8a553cc1009903b09bcbabe72a9f4c7e905c2aa56cad29258f77fe6bd935b7fd"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-linux-x86_64.tar.gz"
-    sha256 "2c55efa640bdfe0e4cae4099a229c5abaddea283eadf50f882b38207ee86f583"
+    sha256 "876bdbe8ef08838dcde5aa955bd2c16eb2ec95aeea755aecbd72444f3978faa2"
   end
 
   on_macos do
@@ -69,7 +69,11 @@ class Cas < Formula
     assert_match "Real review waits default to 1800000", review_help
     assert_match "smoke/control waits default to 300000", review_help
     assert_match "--workflow-binding-json", shell_output("#{bin}/cas review_session --help 2>&1")
-    assert_match "\"cas_rer_workflow_binding_v1\": true", shell_output("#{bin}/cas capabilities --json")
+    capabilities = shell_output("#{bin}/cas capabilities --json")
+    assert_match "\"cas_rer_workflow_binding_v1\": false", capabilities
+    assert_match "\"cas_rer_opaque_request_binding_v1\": true", capabilities
+    assert_match "\"cas_review_history_v2\": true", capabilities
+    assert_match "\"cas_review_scoped_instructions_v1\": true", capabilities
 
     inquiry_help = shell_output("#{bin}/cas_session_inquiry --help 2>&1")
     assert_match "cas_session_inquiry", inquiry_help
