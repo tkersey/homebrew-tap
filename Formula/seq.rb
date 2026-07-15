@@ -1,17 +1,17 @@
 class Seq < Formula
   desc "Zig CLI for mining Codex session and memory artifacts"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.3.45"
+  version "0.3.46"
   license "MIT"
 
   if OS.mac?
     depends_on arch: :arm64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-darwin-arm64.tar.gz"
-    sha256 "36bf12784817401b0a6cfc64bb007e68dbfc685835af82faf969f3be7ed1f0c2"
+    sha256 "80f265594ac6373b6ff5e4fb8a3b539a2d684d1e2fec6fbb5c5663289fdef905"
   else
     depends_on arch: :x86_64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-linux-x86_64.tar.gz"
-    sha256 "60d3d5f449cd75254e99f95548e65e66610ce625b79373ce72d2cd6e32e9d46b"
+    sha256 "308f379b14128a4be641075d892402741944b7f3aee94ad933bd9440d77e9d24"
   end
 
   def install
@@ -58,6 +58,7 @@ class Seq < Formula
 
     capabilities = shell_output("#{bin}/seq capabilities --format json")
     assert_match "\"actuation_hylo_audit_v1\": true", capabilities
+    assert_match "\"skill_decision_receipt_contract_binding_v1\": true", capabilities
     assert_match "\"decision_capsule_v1\": true", capabilities
     assert_match "\"decision_anchor_v1\": true", capabilities
     assert_match "\"historical_decisions_dataset_v1\": true", capabilities
