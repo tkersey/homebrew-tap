@@ -1,14 +1,14 @@
 class Cas < Formula
   desc "Zig CLI helpers for Codex app-server orchestration"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.2.75"
+  version "0.2.77"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-darwin-arm64.tar.gz"
-    sha256 "8a553cc1009903b09bcbabe72a9f4c7e905c2aa56cad29258f77fe6bd935b7fd"
+    sha256 "02805480faaa33bb5e4298e9cd1c752e7beb48c0cf996f9b53b581f47c88877d"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-linux-x86_64.tar.gz"
-    sha256 "876bdbe8ef08838dcde5aa955bd2c16eb2ec95aeea755aecbd72444f3978faa2"
+    sha256 "8c1bcdb2009dddd802363cd20b9a81548f507784c592461a075445f9fc0117b0"
   end
 
   on_macos do
@@ -66,7 +66,7 @@ class Cas < Formula
     assert_match "--verdict-only", review_help
     assert_match "--multi-agent-mode", review_help
     assert_match "--workflow-binding-json", review_help
-    assert_match "Real review waits default to 1800000", review_help
+    assert_match "Real review waits default to 2700000", review_help
     assert_match "smoke/control waits default to 300000", review_help
     assert_match "--workflow-binding-json", shell_output("#{bin}/cas review_session --help 2>&1")
     capabilities = shell_output("#{bin}/cas capabilities --json")
