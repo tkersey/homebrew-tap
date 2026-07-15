@@ -1,15 +1,15 @@
 class Ledger < Formula
   desc "CLI for repo-local ledgers, plan addresses, and artifact validation"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.7.2"
+  version "0.9.0"
   license "MIT"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-darwin-arm64.tar.gz"
-    sha256 "64b8bb8081c048de5c6f3d77734a6d5074f5babf1a5c26ba9a1bb6b9e5c2bb7a"
+    sha256 "28f5668f73882a893594424c6800fc462afddd88c551b7858849c96210b61968"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-linux-x86_64.tar.gz"
-    sha256 "364e3974cbbaa1323ecea545056bfce16cc33de2886b0e98470a1fdb0b5e8457"
+    sha256 "6ae7333e1f90f06d2eb052ce80b6d368b4a1dfa2369ed432825d52a51a038eda"
   end
 
   on_macos do
@@ -47,6 +47,7 @@ class Ledger < Formula
     assert_match "review-fold", validate_help
     assert_match "actuation-review-policy", validate_help
     assert_match "review-resolution", validate_help
+    assert_match "refinement and owner synthesis", validate_help
     assert_match "never reads or writes .ledger", validate_help
 
     (testpath/"review-resolution.json").write <<~JSON
