@@ -1,15 +1,15 @@
 class Ledger < Formula
   desc "CLI for repo-local ledgers, plan addresses, and artifact validation"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.9.0"
+  version "0.10.0"
   license "MIT"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-darwin-arm64.tar.gz"
-    sha256 "28f5668f73882a893594424c6800fc462afddd88c551b7858849c96210b61968"
+    sha256 "9f23c17b87afcb06a2062fbd8baa3db16c496e77bb49c1f4e506d3d3cda0ca15"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-linux-x86_64.tar.gz"
-    sha256 "6ae7333e1f90f06d2eb052ce80b6d368b4a1dfa2369ed432825d52a51a038eda"
+    sha256 "e340a048e3c51ae9e6dec6b83a38bd37876e4bc77eb9f3b064b943a7b42b62a7"
   end
 
   on_macos do
@@ -47,8 +47,16 @@ class Ledger < Formula
     assert_match "review-fold", validate_help
     assert_match "actuation-review-policy", validate_help
     assert_match "review-resolution", validate_help
+    assert_match "source-memory-checkpoint", validate_help
     assert_match "refinement and owner synthesis", validate_help
     assert_match "never reads or writes .ledger", validate_help
+
+    learning_export_help = shell_output("#{bin}/ledger export --source learnings --help")
+    assert_match "memory-note", learning_export_help
+    assert_match "Canonical learning id", learning_export_help
+
+    negative_doctor = shell_output("#{bin}/ledger doctor --source negative-ledger")
+    assert_match '"status":"missing"', negative_doctor
 
     (testpath/"review-resolution.json").write <<~JSON
       {
