@@ -56,7 +56,8 @@ class Ledger < Formula
     assert_match "Canonical learning id", learning_export_help
 
     negative_doctor = shell_output("#{bin}/ledger doctor --source negative-ledger")
-    assert_match '"status":"missing"', negative_doctor
+    assert_match '"ok":true', negative_doctor
+    assert_match '"records":0', negative_doctor
 
     (testpath/"review-resolution.json").write <<~JSON
       {
