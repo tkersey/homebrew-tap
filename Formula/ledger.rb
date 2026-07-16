@@ -1,15 +1,15 @@
 class Ledger < Formula
   desc "CLI for repo-local ledgers, plan addresses, and artifact validation"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.10.0"
+  version "0.10.1"
   license "MIT"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-darwin-arm64.tar.gz"
-    sha256 "9f23c17b87afcb06a2062fbd8baa3db16c496e77bb49c1f4e506d3d3cda0ca15"
+    sha256 "0b56f25733d3844dbe6d72edd4ea518558b1156c6c0919c9754b9dc7ec6d656e"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-linux-x86_64.tar.gz"
-    sha256 "e340a048e3c51ae9e6dec6b83a38bd37876e4bc77eb9f3b064b943a7b42b62a7"
+    sha256 "cdeaf10f53b6e6c0ae27780c44020a1ac184c9d1cb74ab2f87515d4215fd84f3"
   end
 
   on_macos do
@@ -29,7 +29,8 @@ class Ledger < Formula
     assert_match version.to_s, version_output
 
     help = shell_output("#{bin}/ledger --help")
-    assert_match "Durable source-memory, actuation, replay, and plan ledger.", help
+    assert_match "Durable source-memory, actuation", help
+    assert_match "plan ledger.", help
     assert_match "capture", help
     assert_match "map", help
     assert_match "migrate", help
@@ -48,6 +49,16 @@ class Ledger < Formula
     assert_match "actuation-review-policy", validate_help
     assert_match "review-resolution", validate_help
     assert_match "source-memory-checkpoint", validate_help
+    assert_match "hylo-replay-episode", validate_help
+    assert_match "hylo-runner-input", validate_help
+    assert_match "hylo-stimulus", validate_help
+    assert_match "hylo-target-bundle", validate_help
+    assert_match "hylo-world-snapshot", validate_help
+    assert_match "hylo-world-availability-receipt", validate_help
+    assert_match "hylo-runtime-contract", validate_help
+    assert_match "hylo-counterfactual-cut-receipt", validate_help
+    assert_match "hylo-redaction-receipt", validate_help
+    assert_match "hylo-custody-manifest", validate_help
     assert_match "refinement and owner synthesis", validate_help
     assert_match "never reads or writes .ledger", validate_help
 
@@ -104,6 +115,16 @@ class Ledger < Formula
     assert_match '"authority_granted":false', policy_validation
     assert_match '"storage_mutated":false', policy_validation
 
+    (testpath/"malformed-hylo-episode.json").write "{}\n"
+    hylo_validation = shell_output(
+      "#{bin}/ledger validate hylo-replay-episode --input #{testpath}/malformed-hylo-episode.json",
+      2,
+    )
+    assert_match '"contract":"hylo-replay-episode"', hylo_validation
+    assert_match '"verdict":"blocked"', hylo_validation
+    assert_match '"authority_granted":false', hylo_validation
+    assert_match '"storage_mutated":false', hylo_validation
+
     (testpath/"plan-source-contract.json").write <<~JSON
       {
         "plan_source_contract": {
@@ -155,11 +176,15 @@ class Ledger < Formula
     assert_match "prepare", actuation_help
     assert_match "decide", actuation_help
 
-    hylo_help = shell_output("#{bin}/ledger --source hylo --help")
-    assert_match "portable replay-campaign validation", hylo_help
-    assert_match "validate-campaign", hylo_help
-    assert_match "snapshot-target", hylo_help
-    assert_match "progress", hylo_help
+    if OS.mac?
+      hylo_help = shell_output("#{bin}/ledger --source hylo --help")
+      assert_match "portable replay-campaign validation", hylo_help
+      assert_match "validate-campaign", hylo_help
+      assert_match "snapshot-target", hylo_help
+      assert_match "progress", hylo_help
+      assert_match "frontier", hylo_help
+      assert_match "next-experiment", hylo_help
+    end
 
     universalist_help = shell_output("#{bin}/ledger --source universalist --help")
     assert_match "collision-safe Universalist plan artifacts", universalist_help
@@ -168,6 +193,18 @@ class Ledger < Formula
     assert_match "path", universalist_help
 
     system "git", "init", "-q"
+    if OS.mac?
+      frontier = shell_output(
+        "#{bin}/ledger --source hylo frontier --campaign-id tap-missing --format json 2>&1",
+        2,
+      )
+      assert_match '"error":"CampaignMissing"', frontier
+      next_experiment = shell_output(
+        "#{bin}/ledger --source hylo next-experiment --campaign-id tap-missing --format json 2>&1",
+        2,
+      )
+      assert_match '"error":"CampaignMissing"', next_experiment
+    end
     (testpath/".gitignore").write ".ledger/\n"
     (testpath/"universalist-plan.md").write "# Universalist Plan\n\n## Status: planned\n"
     first_plan = shell_output(
