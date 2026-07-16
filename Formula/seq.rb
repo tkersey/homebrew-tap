@@ -1,17 +1,17 @@
 class Seq < Formula
   desc "Zig CLI for mining Codex session and memory artifacts"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.3.46"
+  version "0.3.47"
   license "MIT"
 
   if OS.mac?
     depends_on arch: :arm64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-darwin-arm64.tar.gz"
-    sha256 "80f265594ac6373b6ff5e4fb8a3b539a2d684d1e2fec6fbb5c5663289fdef905"
+    sha256 "3cf6322ee5a8526906ab97fc2975fae0f058c82051e25b32c3ae3f22c4bb1967"
   else
     depends_on arch: :x86_64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-linux-x86_64.tar.gz"
-    sha256 "308f379b14128a4be641075d892402741944b7f3aee94ad933bd9440d77e9d24"
+    sha256 "4da097176fb922a83cb6d99eddf6c41d0c8c75f96a714b9817641f381983dffb"
   end
 
   def install
@@ -55,6 +55,10 @@ class Seq < Formula
     assert_match "find-session", help
     assert_match "dataset-schema", help
     assert_match "query", help
+    if OS.mac?
+      assert_match "hctp-source", help
+      assert_match "hylo-extract", help
+    end
 
     capabilities = shell_output("#{bin}/seq capabilities --format json")
     assert_match "\"actuation_hylo_audit_v1\": true", capabilities
@@ -77,6 +81,29 @@ class Seq < Formula
     assert_match "\"c3_structured_closure_v1\": true", capabilities
     assert_match "\"execution_policy_audit_v1\": true", capabilities
     assert_match "\"policy_transition_dataset_v1\": true", capabilities
+    if OS.mac?
+      assert_match "\"hctp_source_selection_v1\": true", capabilities
+      assert_match "\"hctp_independence_clusters_v1\": true", capabilities
+      assert_match "\"hctp_sealed_case_v1\": true", capabilities
+      assert_match "\"hctp_materializer_v1\": true", capabilities
+      assert_match "\"hylo_extract_v1\": true", capabilities
+
+      hctp_source_help = shell_output("#{bin}/seq hctp-source --help")
+      assert_match "compile", hctp_source_help
+      assert_match "validate", hctp_source_help
+      assert_match "govern", hctp_source_help
+      assert_match "materialize", hctp_source_help
+
+      hylo_extract_help = shell_output("#{bin}/seq hylo-extract --help")
+      assert_match "--root", hylo_extract_help
+      assert_match "--session-id", hylo_extract_help
+      assert_match "--turn-index", hylo_extract_help
+      assert_match "--target-skill", hylo_extract_help
+      assert_match "--target-root", hylo_extract_help
+      assert_match "--output-root", hylo_extract_help
+      assert_match "--sealed-root", hylo_extract_help
+      assert_match "--seal-key-output-fd", hylo_extract_help
+    end
 
     token_help = shell_output("#{bin}/seq token-usage --help")
     assert_match "--tz", token_help
