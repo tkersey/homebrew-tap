@@ -62,8 +62,10 @@ class Seq < Formula
 
     capabilities = shell_output("#{bin}/seq capabilities --format json")
     assert_match "\"actuation_hylo_audit_v1\": true", capabilities
+    assert_match "\"skill_contract_v1\": true", capabilities
     assert_match "\"skill_decision_receipt_contract_binding_v1\": true", capabilities
     assert_match "\"skill_contract_receipt_binding_projection_v1\": true", capabilities
+    assert_match "\"skill_decision_receipt_v1\": true", capabilities
     assert_match "\"decision_capsule_v1\": true", capabilities
     assert_match "\"decision_anchor_v1\": true", capabilities
     assert_match "\"historical_decisions_dataset_v1\": true", capabilities
