@@ -1,15 +1,17 @@
 class Ledger < Formula
   desc "CLI for repo-local ledgers, plan addresses, and artifact validation"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.10.3"
+  version "0.10.4"
   license "MIT"
+
+  depends_on "tkersey/tap/seq"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-darwin-arm64.tar.gz"
-    sha256 "d28a61b03f5a75daf55af6e8b2833a974328d945c2e9c22be4b77908240fc630"
+    sha256 "5e4039a9a852783dd02718b9b5b53f98800225f665dd35fe7e53e8452d73b95d"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-linux-x86_64.tar.gz"
-    sha256 "7c394d20b1bc964986123767caf665a8285a479c9440403ef0021273d0e8eead"
+    sha256 "55c902630224cd5e18c16b9cdd41f39f4551bd66bf4241ecaf247da9f964d986"
   end
 
   on_macos do
@@ -191,6 +193,7 @@ class Ledger < Formula
     assert_match "create", universalist_help
     assert_match "latest", universalist_help
     assert_match "path", universalist_help
+    assert_match "emit", universalist_help
 
     system "git", "init", "-q"
     if OS.mac?
@@ -207,6 +210,16 @@ class Ledger < Formula
     end
     (testpath/".gitignore").write ".ledger/\n"
     (testpath/"universalist-plan.md").write "# Universalist Plan\n\n## Status: planned\n"
+    skill_root = testpath/"universalist-skill"
+    (skill_root/"references").mkpath
+    (skill_root/"package.json").write "{\"version\":\"16.0.4\"}\n"
+    (skill_root/"references/decision-contract.json").write <<~JSON
+      {"skill_decision_contract":{"contract_version":"SKDC-v1","skill":{"name":"universalist","kind":"mixed","source_fingerprint":"tap-v1"},"triggers":[{"trigger_id":"UNI-TAP","description":"tap trigger","cue_literals":["tap"],"cue_regexes":[],"exclusions":[]}],"routes":[{"route_id":"UNI-ORDINARY","description":"tap route","aliases":[],"terminal":false},{"route_id":"UNI-PRESERVE","description":"tap alternative","aliases":[],"terminal":true}],"clauses":[{"clause_id":"UNI-TAP-001","trigger_refs":["UNI-TAP"],"expected_routes":["UNI-ORDINARY","UNI-PRESERVE"],"prohibited_routes":[],"required_artifacts":["receipt"],"success_signals":[],"failure_signals":[],"rationale":"tap coverage"}],"instrumentation":{"decision_receipt":"required","rationale":"tap coverage"}}}
+    JSON
+    system "git", "config", "user.name", "Homebrew Test"
+    system "git", "config", "user.email", "homebrew-test@example.invalid"
+    system "git", "add", ".gitignore", "universalist-plan.md", "universalist-skill"
+    system "git", "commit", "-q", "-m", "Add Universalist fixtures"
     first_plan = shell_output(
       "#{bin}/ledger create --source universalist --repo #{testpath} --template #{testpath}/universalist-plan.md",
     )
@@ -229,6 +242,19 @@ class Ledger < Formula
     assert_equal first_path, shell_output(
       "#{bin}/ledger path --source universalist --repo #{testpath} --id #{first_id}",
     ).strip
+
+    receipt = shell_output(
+      "#{bin}/ledger emit --source universalist " \
+      "--plan #{first_path} --contract #{skill_root}/references/decision-contract.json " \
+      "--trigger-ref UNI-TAP --clause-ref UNI-TAP-001 " \
+      "--question tap-seam --selected-route UNI-ORDINARY " \
+      "--rejected-route UNI-PRESERVE --expected-outcome tap-outcome " \
+      "--disposition changed --construction tap-adapter --law tap-law " \
+      "--falsifier tap-falsifier --advanced-mechanics none " \
+      "--evidence-ref tap:formula --write-plan",
+    )
+    assert_match '"selected_route":"UNI-ORDINARY"', receipt
+    assert_match '"skill_decision_receipt"', File.read(first_path)
 
     system bin/"ledger", "init"
     assert_path_exists testpath/".ledger/negative-ledger/events.jsonl"
