@@ -1,17 +1,17 @@
 class Ledger < Formula
   desc "CLI for repo-local ledgers, plan addresses, and artifact validation"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.10.4"
+  version "0.10.5"
   license "MIT"
 
   depends_on "tkersey/tap/seq"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-darwin-arm64.tar.gz"
-    sha256 "5e4039a9a852783dd02718b9b5b53f98800225f665dd35fe7e53e8452d73b95d"
+    sha256 "eaf30f3b13c7906b0736e7285bdccf4a204b24dbde1af6c34caf0d5aa58cedbe"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-linux-x86_64.tar.gz"
-    sha256 "55c902630224cd5e18c16b9cdd41f39f4551bd66bf4241ecaf247da9f964d986"
+    sha256 "a2d479d8f61b5fc3aeff79d86cc03a45e69dd4a7f3a98f2040d18560a0dca531"
   end
 
   on_macos do
@@ -67,6 +67,10 @@ class Ledger < Formula
     learning_export_help = shell_output("#{bin}/ledger export --source learnings --help")
     assert_match "memory-note", learning_export_help
     assert_match "Canonical learning id", learning_export_help
+
+    learning_show_help = shell_output("#{bin}/ledger show --source learnings --help")
+    assert_match "alias for export --format full", learning_show_help
+    assert_match "Canonical learning id", learning_show_help
 
     negative_doctor = shell_output("#{bin}/ledger doctor --source negative-ledger")
     assert_match '"ok":true', negative_doctor
@@ -313,16 +317,28 @@ class Ledger < Formula
     assert_match "\"operation\":\"assert\"", synesthesia_export
     refute_match "logical_kind", synesthesia_export
 
-    system bin/"ledger", "capture", "--source", "learnings",
-      "--status", "do_more",
-      "--learning",
-      "When tap tests install ledger, use ledger capture --source learnings because formula tests catch regressions.",
-      "--evidence", "command: brew test ledger writes .ledger/learnings/events.jsonl",
-      "--application", "Keep ledger --source learnings covered in the formula test.",
-      "--tag", "homebrew",
-      "--allow-temp-path"
+    learning_capture = shell_output(
+      "#{bin}/ledger capture --source learnings --status do_more " \
+      "--learning \"When tap tests install ledger, use ledger capture --source learnings " \
+      "because formula tests catch regressions.\" " \
+      "--evidence \"command: brew test ledger writes .ledger/learnings/events.jsonl\" " \
+      "--application \"Keep ledger --source learnings covered in the formula test.\" " \
+      "--tag homebrew --allow-temp-path",
+    )
+    learning_id = learning_capture[/appended: id=(lrn-[^ ]+)/, 1]
+    refute_nil learning_id
     assert_path_exists testpath/".ledger/learnings/events.jsonl"
     recent = shell_output("#{bin}/ledger recent --source learnings --limit 1")
     assert_match "tap tests install ledger", recent
+
+    learning_full = shell_output(
+      "#{bin}/ledger export --source learnings --id #{learning_id} --format full",
+    )
+    assert_equal learning_full, shell_output(
+      "#{bin}/ledger show --source learnings --id #{learning_id}",
+    )
+    assert_equal learning_full, shell_output(
+      "#{bin}/ledger --source learnings show --id #{learning_id}",
+    )
   end
 end
