@@ -189,7 +189,7 @@ class Ledger < Formula
     end
 
     universalist_help = shell_output("#{bin}/ledger --source universalist --help")
-    assert_match "collision-safe Universalist plan artifacts", universalist_help
+    assert_match "Allocate, resolve, and emit receipts for Universalist plan artifacts", universalist_help
     assert_match "create", universalist_help
     assert_match "latest", universalist_help
     assert_match "path", universalist_help
