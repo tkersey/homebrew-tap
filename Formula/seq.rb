@@ -1,17 +1,17 @@
 class Seq < Formula
   desc "Zig CLI for mining Codex session and memory artifacts"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.3.50"
+  version "0.3.51"
   license "MIT"
 
   if OS.mac?
     depends_on arch: :arm64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-darwin-arm64.tar.gz"
-    sha256 "f45a11792ef693bf0fff3f9a10e9e0ee57a26db704781e983d783f3fd404aa13"
+    sha256 "0bc319b1abf2cf3a2f6372e7533401c6ae701b5fcffcf561e3d23805026f3c0d"
   else
     depends_on arch: :x86_64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-linux-x86_64.tar.gz"
-    sha256 "7a0ff3e115dffb0dd7251b53402136b13a86b423478c5d60f6ed2107c79c2941"
+    sha256 "2578b4b20f401e5082b8768f86ac5f0cd78eb7a8c9505cc27eb36ec5379d994d"
   end
 
   def install
@@ -63,6 +63,7 @@ class Seq < Formula
     capabilities = shell_output("#{bin}/seq capabilities --format json")
     assert_match "\"actuation_hylo_audit_v1\": true", capabilities
     assert_match "\"skill_decision_receipt_contract_binding_v1\": true", capabilities
+    assert_match "\"skill_contract_receipt_binding_projection_v1\": true", capabilities
     assert_match "\"decision_capsule_v1\": true", capabilities
     assert_match "\"decision_anchor_v1\": true", capabilities
     assert_match "\"historical_decisions_dataset_v1\": true", capabilities
@@ -81,6 +82,16 @@ class Seq < Formula
     assert_match "\"c3_structured_closure_v1\": true", capabilities
     assert_match "\"execution_policy_audit_v1\": true", capabilities
     assert_match "\"policy_transition_dataset_v1\": true", capabilities
+
+    (testpath/"receipt-contract.json").write <<~JSON
+      {"skill_decision_contract":{"contract_version":"SKDC-v1","skill":{"name":"tap-skill","kind":"decision","source_fingerprint":"tap-v1"},"triggers":[{"trigger_id":"T1","description":"tap trigger","cue_literals":["tap"],"cue_regexes":[],"exclusions":[]}],"routes":[{"route_id":"R1","description":"tap route","aliases":[],"terminal":true}],"clauses":[{"clause_id":"C1","trigger_refs":["T1"],"expected_routes":["R1"],"prohibited_routes":[],"required_artifacts":["receipt"],"success_signals":[],"failure_signals":[],"rationale":"tap coverage"}],"instrumentation":{"decision_receipt":"required","rationale":"tap coverage"}}}
+    JSON
+    receipt_projection = shell_output(
+      "#{bin}/seq skill-contract validate --file #{testpath}/receipt-contract.json --format json",
+    )
+    assert_match '"valid": true', receipt_projection
+    assert_match '"skill_kind": "decision"', receipt_projection
+    assert_match '"clause_routes": [{"clause_id": "C1"', receipt_projection
     if OS.mac?
       assert_match "\"hctp_source_selection_v1\": true", capabilities
       assert_match "\"hctp_independence_clusters_v1\": true", capabilities
