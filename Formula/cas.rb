@@ -94,7 +94,7 @@ class Cas < Formula
       assert_match "key-info", trial_help
 
       direct_trial_help = shell_output("#{bin}/cas_trial --help 2>&1")
-      assert_match "One-claim HCTP-v1 lane runner", direct_trial_help
+      assert_match "One-claim HCTP lane runner", direct_trial_help
 
       invalid_trial = testpath/"invalid-trial.json"
       invalid_trial.write "{}\n"
