@@ -85,7 +85,7 @@ class Cas < Formula
       assert_match "\"hylo_signed_run_receipt_v1\": true", capabilities
 
       trial_help = shell_output("#{bin}/cas trial --help 2>&1")
-      assert_match "One-claim HCTP-v1 lane runner", trial_help
+      assert_match "One-claim HCTP lane runner", trial_help
       assert_match "preflight", trial_help
       assert_match "compile-replay", trial_help
       assert_match "run", trial_help
