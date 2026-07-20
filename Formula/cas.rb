@@ -1,14 +1,14 @@
 class Cas < Formula
   desc "Zig CLI helpers for Codex app-server orchestration"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.2.82"
+  version "0.2.83"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-darwin-arm64.tar.gz"
-    sha256 "9f276533ec93aa9d87fd759334a634cd3ae81e2d86ead2f0b5d32df93d4f212f"
+    sha256 "d4b4dbc184613c830b0232f8fe196c6a703ec5b2763957ab6f5e83942f8c1ed3"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-linux-x86_64.tar.gz"
-    sha256 "07bea8eb02457351a6b0f8ed5dcda14de146d1486b1d65e5d560cc3b14a7767c"
+    sha256 "e6f3ac6bf7884f09da13ef3ba60ada154be4553827d94719b21f04c088b7638d"
   end
 
   on_macos do
@@ -60,20 +60,18 @@ class Cas < Formula
     assert_match "--multi-agent-mode", runner_help
 
     review_help = shell_output("#{bin}/cas_review_session --help 2>&1")
-    assert_match "cas_review_session", review_help
+    assert_match "cas review", review_help
     assert_match "Actions:", review_help
     assert_match "run", review_help
-    assert_match "receipt", review_help
-    assert_match "--verdict-only", review_help
+    assert_match "start", review_help
+    assert_match "wait", review_help
     assert_match "--multi-agent-mode", review_help
     assert_match "--workflow-binding-json", review_help
     assert_match "Real review waits default to 2700000", review_help
-    assert_match "smoke/control waits default to 300000", review_help
-    assert_match "--workflow-binding-json", shell_output("#{bin}/cas review_session --help 2>&1")
+    assert_match "detached starts default to 300000", review_help
+    assert_match "--workflow-binding-json", shell_output("#{bin}/cas review --help 2>&1")
     capabilities = shell_output("#{bin}/cas capabilities --json")
-    assert_match "\"cas_rer_workflow_binding_v1\": false", capabilities
     assert_match "\"cas_rer_opaque_request_binding_v1\": true", capabilities
-    assert_match "\"cas_review_history_v2\": true", capabilities
     assert_match "\"cas_review_scoped_instructions_v1\": true", capabilities
 
     if OS.mac?

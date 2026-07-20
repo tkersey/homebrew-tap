@@ -1,17 +1,17 @@
 class Ledger < Formula
   desc "CLI for repo-local ledgers, plan addresses, and artifact validation"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.10.7"
+  version "0.11.0"
   license "MIT"
 
   depends_on "tkersey/tap/seq"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-darwin-arm64.tar.gz"
-    sha256 "5a54da8477ae0f86eed8d88cd87d657f878c78c70a6fe31cd2085df035c87383"
+    sha256 "cc3924175e80861147adbb2ac64cea82bd8accd26c6f750d82a53813d0730767"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-linux-x86_64.tar.gz"
-    sha256 "43e12593a9efc1340ed34ccdce8f699462aedf0febb05ac5ad381d77da2153df"
+    sha256 "46efbc5d12c2907c61fa1e17d1770e44456f664eb8f18c0be41bb9ff89befef9"
   end
 
   on_macos do
@@ -31,8 +31,8 @@ class Ledger < Formula
     assert_match version.to_s, version_output
 
     help = shell_output("#{bin}/ledger --help")
-    assert_match "Durable source-memory, actuation", help
-    assert_match "plan ledger.", help
+    assert_match "Materialize, validate, record, and project workflow artifacts", help
+    assert_match "including Actuating evidence", help
     assert_match "capture", help
     assert_match "map", help
     assert_match "migrate", help
@@ -47,9 +47,6 @@ class Ledger < Formula
     validate_help = shell_output("#{bin}/ledger validate --help")
     assert_match "plan-source-contract", validate_help
     assert_match "policy-synthesis-receipt", validate_help
-    assert_match "review-fold", validate_help
-    assert_match "actuation-review-policy", validate_help
-    assert_match "review-resolution", validate_help
     assert_match "source-memory-checkpoint", validate_help
     assert_match "hylo-replay-episode", validate_help
     assert_match "hylo-runner-input", validate_help
@@ -61,7 +58,7 @@ class Ledger < Formula
     assert_match "hylo-counterfactual-cut-receipt", validate_help
     assert_match "hylo-redaction-receipt", validate_help
     assert_match "hylo-custody-manifest", validate_help
-    assert_match "refinement and owner synthesis", validate_help
+    assert_match "hylo-trial", validate_help
     assert_match "never reads or writes .ledger", validate_help
 
     learning_export_help = shell_output("#{bin}/ledger export --source learnings --help")
@@ -75,51 +72,6 @@ class Ledger < Formula
     negative_doctor = shell_output("#{bin}/ledger doctor --source negative-ledger")
     assert_match '"ok":true', negative_doctor
     assert_match '"records":0', negative_doctor
-
-    (testpath/"review-resolution.json").write <<~JSON
-      {
-        "review_resolution": {
-          "version": "review-resolution/v1",
-          "resolution_id": "tap-smoke",
-          "run_id": "run-smoke",
-          "review_folds": [
-            {
-              "version": "RF-v2",
-              "findings": [],
-              "compression": {"equivalence_classes": []}
-            }
-          ],
-          "finding_ids": [],
-          "decisions": [],
-          "outcome": {
-            "status": "clean",
-            "semantic_balance": {
-              "uncovered_liabilities": [],
-              "required_retirements": [],
-              "completed_retirements": [],
-              "dominated_remaining": []
-            }
-          }
-        }
-      }
-    JSON
-    resolution_validation = shell_output(
-      "#{bin}/ledger validate review-resolution --phase closeout --input #{testpath}/review-resolution.json",
-    )
-    assert_match '"schema":"actuating-review-resolution-decision/v1"', resolution_validation
-    assert_match '"verdict":"pass"', resolution_validation
-    assert_match '"authority_granted":false', resolution_validation
-    assert_match '"storage_mutated":false', resolution_validation
-
-    (testpath/"malformed-policy.json").write "{}\n"
-    policy_validation = shell_output(
-      "#{bin}/ledger validate actuation-review-policy --phase preflight --input #{testpath}/malformed-policy.json",
-      2,
-    )
-    assert_match '"schema":"actuation-review-policy-decision/v1"', policy_validation
-    assert_match '"verdict":"blocked"', policy_validation
-    assert_match '"authority_granted":false', policy_validation
-    assert_match '"storage_mutated":false', policy_validation
 
     (testpath/"malformed-hylo-episode.json").write "{}\n"
     hylo_validation = shell_output(
@@ -178,9 +130,11 @@ class Ledger < Formula
     assert_match '"storage_mutated":false', validation
 
     actuation_help = shell_output("#{bin}/ledger --source actuation --help")
-    assert_match "one causal actuation-kernel transition", actuation_help
+    assert_match "Materialize Actuating artifacts", actuation_help
+    assert_match "append", actuation_help
     assert_match "prepare", actuation_help
-    assert_match "decide", actuation_help
+    assert_match "state", actuation_help
+    assert_match "project", actuation_help
 
     if OS.mac?
       hylo_help = shell_output("#{bin}/ledger --source hylo --help")
@@ -200,6 +154,16 @@ class Ledger < Formula
     assert_match "emit", universalist_help
 
     system "git", "init", "-q"
+    actuation_doctor = shell_output(
+      "#{bin}/ledger --source actuation --repo #{testpath} --goal tap-goal doctor",
+    )
+    assert_match '"ok":true', actuation_doctor
+    assert_match '"events":0', actuation_doctor
+    actuation_path = shell_output(
+      "#{bin}/ledger --source actuation --repo #{testpath} --goal tap-goal path",
+    )
+    assert_match ".ledger/actuation/tap-goal/evidence.jsonl", actuation_path
+
     if OS.mac?
       frontier = shell_output(
         "#{bin}/ledger --source hylo frontier --campaign-id tap-missing --format json 2>&1",
