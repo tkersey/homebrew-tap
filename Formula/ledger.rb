@@ -1,17 +1,17 @@
 class Ledger < Formula
   desc "CLI for repo-local ledgers, plan addresses, and artifact validation"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.11.6"
+  version "0.11.7"
   license "MIT"
 
   depends_on "tkersey/tap/seq"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-darwin-arm64.tar.gz"
-    sha256 "51acf8d89689e583ebfdb2722e58a77b4a36b766ee84f1fdb134c3a34167781d"
+    sha256 "f3b5e726badc18d227a2d3f73421af2cf247eddd0a336a37c646b39a71e96ef0"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-linux-x86_64.tar.gz"
-    sha256 "003ca0890ef8c7543bf3214272cd5e466b6ac1eae3e866cf6a8b10140893f4dd"
+    sha256 "55428ed9f37b6b806a287e810b7695947c83e10cfe304d62f1d72d6b06d18f32"
   end
 
   on_macos do
@@ -135,6 +135,7 @@ class Ledger < Formula
     assert_match "prepare", actuation_help
     assert_match "state", actuation_help
     assert_match "project", actuation_help
+    assert_match "--review-contract FILE|-", actuation_help
 
     if OS.mac?
       hylo_help = shell_output("#{bin}/ledger --source hylo --help")
