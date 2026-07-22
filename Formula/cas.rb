@@ -1,14 +1,14 @@
 class Cas < Formula
   desc "Zig CLI helpers for Codex app-server orchestration"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.2.89"
+  version "0.2.90"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-darwin-arm64.tar.gz"
-    sha256 "ca738752ed2087b9d00646afaddcbe9c23ccbbc1d5f8c17df64a26d3208adccb"
+    sha256 "81c183f0b10bde168e3a8c467cb90ab636a72298b500fd565af179e70750a993"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-linux-x86_64.tar.gz"
-    sha256 "c1ca579caa52f8e7f81603645330f75fe17af3b95f716a80a0988d3c0cc1a6b1"
+    sha256 "467f895fc651adf8e4e672aa4d5c8b9cdcf9da053a3f64026c9aa7479ab8a105"
   end
 
   on_macos do
@@ -73,6 +73,7 @@ class Cas < Formula
     capabilities = shell_output("#{bin}/cas capabilities --json")
     assert_match "\"cas_rer_opaque_request_binding_v1\": true", capabilities
     assert_match "\"cas_review_scoped_instructions_v1\": true", capabilities
+    assert_match "\"cas_codex_0145_structured_review_v1\": true", capabilities
 
     if OS.mac?
       assert_path_exists bin/"cas_trial"
