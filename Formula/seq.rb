@@ -188,7 +188,7 @@ class Seq < Formula
     assert_match "--policy-root", execution_policy_help
 
     actuation_audit_help = shell_output("#{bin}/seq actuation-audit --help")
-    assert_match "summary|runs|slices|proof|compactions|decisions|hylo|report", actuation_audit_help
+    assert_match "summary|runs|slices|proof|compactions|decisions|hylo|kernel|report", actuation_audit_help
 
     hylo_fixture = testpath/"hylo-resolve.jsonl"
     hylo_fixture.write <<~JSONL
