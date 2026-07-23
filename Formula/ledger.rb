@@ -1,17 +1,17 @@
 class Ledger < Formula
   desc "CLI for repo-local ledgers, plan addresses, and artifact validation"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.11.7"
+  version "0.12.0"
   license "MIT"
 
   depends_on "tkersey/tap/seq"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-darwin-arm64.tar.gz"
-    sha256 "f3b5e726badc18d227a2d3f73421af2cf247eddd0a336a37c646b39a71e96ef0"
+    sha256 "1d333071901cac8b2523adb66c8978a479d15e49702425e6b8fd750597eee8ce"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-linux-x86_64.tar.gz"
-    sha256 "55428ed9f37b6b806a287e810b7695947c83e10cfe304d62f1d72d6b06d18f32"
+    sha256 "a1aff63fbe2da34814b24b8c6ea2c58524f4e4533ebfda23ff78e786886b10cd"
   end
 
   on_macos do
@@ -48,17 +48,6 @@ class Ledger < Formula
     assert_match "plan-source-contract", validate_help
     assert_match "policy-synthesis-receipt", validate_help
     assert_match "source-memory-checkpoint", validate_help
-    assert_match "hylo-replay-episode", validate_help
-    assert_match "hylo-runner-input", validate_help
-    assert_match "hylo-stimulus", validate_help
-    assert_match "hylo-target-bundle", validate_help
-    assert_match "hylo-world-snapshot", validate_help
-    assert_match "hylo-world-availability-receipt", validate_help
-    assert_match "hylo-runtime-contract", validate_help
-    assert_match "hylo-counterfactual-cut-receipt", validate_help
-    assert_match "hylo-redaction-receipt", validate_help
-    assert_match "hylo-custody-manifest", validate_help
-    assert_match "hylo-trial", validate_help
     assert_match "never reads or writes .ledger", validate_help
 
     learning_export_help = shell_output("#{bin}/ledger export --source learnings --help")
@@ -72,16 +61,6 @@ class Ledger < Formula
     negative_doctor = shell_output("#{bin}/ledger doctor --source negative-ledger")
     assert_match '"ok":true', negative_doctor
     assert_match '"records":0', negative_doctor
-
-    (testpath/"malformed-hylo-episode.json").write "{}\n"
-    hylo_validation = shell_output(
-      "#{bin}/ledger validate hylo-replay-episode --input #{testpath}/malformed-hylo-episode.json",
-      2,
-    )
-    assert_match '"contract":"hylo-replay-episode"', hylo_validation
-    assert_match '"verdict":"blocked"', hylo_validation
-    assert_match '"authority_granted":false', hylo_validation
-    assert_match '"storage_mutated":false', hylo_validation
 
     (testpath/"plan-source-contract.json").write <<~JSON
       {
@@ -137,16 +116,6 @@ class Ledger < Formula
     assert_match "project", actuation_help
     assert_match "--review-contract FILE|-", actuation_help
 
-    if OS.mac?
-      hylo_help = shell_output("#{bin}/ledger --source hylo --help")
-      assert_match "portable replay-campaign validation", hylo_help
-      assert_match "validate-campaign", hylo_help
-      assert_match "snapshot-target", hylo_help
-      assert_match "progress", hylo_help
-      assert_match "frontier", hylo_help
-      assert_match "next-experiment", hylo_help
-    end
-
     universalist_help = shell_output("#{bin}/ledger --source universalist --help")
     assert_match "Allocate, resolve, and emit receipts for Universalist plan artifacts", universalist_help
     assert_match "create", universalist_help
@@ -165,18 +134,6 @@ class Ledger < Formula
     )
     assert_match ".ledger/actuation/tap-goal/evidence.jsonl", actuation_path
 
-    if OS.mac?
-      frontier = shell_output(
-        "#{bin}/ledger --source hylo frontier --campaign-id tap-missing --format json 2>&1",
-        2,
-      )
-      assert_match '"error":"CampaignMissing"', frontier
-      next_experiment = shell_output(
-        "#{bin}/ledger --source hylo next-experiment --campaign-id tap-missing --format json 2>&1",
-        2,
-      )
-      assert_match '"error":"CampaignMissing"', next_experiment
-    end
     (testpath/".gitignore").write ".ledger/\n"
     (testpath/"universalist-plan.md").write "# Universalist Plan\n\n## Status: planned\n"
     skill_root = testpath/"universalist-skill"

@@ -1,14 +1,14 @@
 class Cas < Formula
   desc "Zig CLI helpers for Codex app-server orchestration"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.2.94"
+  version "0.3.0"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-darwin-arm64.tar.gz"
-    sha256 "6114ed6d7172c29d933aea7a6e8b7373be72173156543ce5d2e2fb8ff9d00336"
+    sha256 "5c4b5274378c200eeaffd559356f10e7e05402877fa95512b95ca332cab8627b"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-linux-x86_64.tar.gz"
-    sha256 "17061e171df01b625cac996844aaaa7f84a880e1d6301f3631234e4ab3c5effd"
+    sha256 "17f76790877b441109e24da0b2447f81e10679e44c44532f56c6f353b5acc223"
   end
 
   on_macos do
@@ -29,7 +29,6 @@ class Cas < Formula
     bin.install "cas-review-session" => "cas_review_session"
     bin.install "cas-session-inquiry" => "cas_session_inquiry"
     bin.install "cas-perf-budget-governor"
-    bin.install "cas_trial" if OS.mac?
   end
 
   test do
@@ -74,35 +73,6 @@ class Cas < Formula
     assert_match "\"cas_rer_opaque_request_binding_v1\": true", capabilities
     assert_match "\"cas_review_scoped_instructions_v1\": true", capabilities
     assert_match "\"cas_codex_0145_structured_review_v4\": true", capabilities
-
-    if OS.mac?
-      assert_path_exists bin/"cas_trial"
-      assert_match version.to_s, shell_output("#{bin}/cas_trial --version")
-      assert_match "trial", cas_help
-      assert_match "\"hylo_trial_runner_v1\": true", capabilities
-      assert_match "\"hylo_fd_lane_lease_v1\": true", capabilities
-      assert_match "\"hylo_signed_run_receipt_v1\": true", capabilities
-
-      trial_help = shell_output("#{bin}/cas trial --help 2>&1")
-      assert_match "One-claim HCTP lane runner", trial_help
-      assert_match "preflight", trial_help
-      assert_match "compile-replay", trial_help
-      assert_match "run", trial_help
-      assert_match "status", trial_help
-      assert_match "cleanup", trial_help
-      assert_match "key-info", trial_help
-
-      direct_trial_help = shell_output("#{bin}/cas_trial --help 2>&1")
-      assert_match "One-claim HCTP lane runner", direct_trial_help
-
-      invalid_trial = testpath/"invalid-trial.json"
-      invalid_trial.write "{}\n"
-      preflight = shell_output(
-        "#{bin}/cas trial preflight --trial #{invalid_trial} --lane-id tap-lane --json 2>&1",
-        1,
-      )
-      assert_match "MissingField", preflight
-    end
 
     inquiry_help = shell_output("#{bin}/cas_session_inquiry --help 2>&1")
     assert_match "cas_session_inquiry", inquiry_help
