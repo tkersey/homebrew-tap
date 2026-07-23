@@ -1,17 +1,17 @@
 class Seq < Formula
   desc "Zig CLI for mining Codex session and memory artifacts"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.3.59"
+  version "0.4.0"
   license "MIT"
 
   if OS.mac?
     depends_on arch: :arm64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-darwin-arm64.tar.gz"
-    sha256 "2956d665443f7450cb295b44af44f274ac1cdff3121c9de8db311eee60dc2287"
+    sha256 "85b9928b695f4883ccd75b96cff177181b24b5079a4fe80166cef91db79d568c"
   else
     depends_on arch: :x86_64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-linux-x86_64.tar.gz"
-    sha256 "741262ae2337b37bf1d5daf15390d575e3bb2363b951bc36a00095b0f774c48c"
+    sha256 "ba112eca6a08b91502814151790e8ebcbd9b12a1b86a412baaed5aa92142c5b2"
   end
 
   def install
@@ -58,14 +58,8 @@ class Seq < Formula
     assert_match "find-session", help
     assert_match "dataset-schema", help
     assert_match "query", help
-    if OS.mac?
-      assert_match "hctp-source", help
-      assert_match "hylo-extract", help
-    end
-
     capabilities = shell_output("#{bin}/seq capabilities --format json")
     assert_match "\"streaming_session_scanner_v1\": true", capabilities
-    assert_match "\"actuation_hylo_audit_v1\": true", capabilities
     assert_match "\"actuation_artifact_kernel_audit_v1\": true", capabilities
     assert_match "\"skill_contract_v1\": true", capabilities
     assert_match "\"skill_decision_receipt_contract_binding_v1\": true", capabilities
@@ -99,30 +93,6 @@ class Seq < Formula
     assert_match '"valid": true', receipt_projection
     assert_match '"skill_kind": "decision"', receipt_projection
     assert_match '"clause_routes": [{"clause_id": "C1"', receipt_projection
-    if OS.mac?
-      assert_match "\"hctp_source_selection_v1\": true", capabilities
-      assert_match "\"hctp_independence_clusters_v1\": true", capabilities
-      assert_match "\"hctp_sealed_case_v1\": true", capabilities
-      assert_match "\"hctp_materializer_v1\": true", capabilities
-      assert_match "\"hylo_extract_v1\": true", capabilities
-
-      hctp_source_help = shell_output("#{bin}/seq hctp-source --help")
-      assert_match "compile", hctp_source_help
-      assert_match "validate", hctp_source_help
-      assert_match "govern", hctp_source_help
-      assert_match "materialize", hctp_source_help
-
-      hylo_extract_help = shell_output("#{bin}/seq hylo-extract --help")
-      assert_match "--root", hylo_extract_help
-      assert_match "--session-id", hylo_extract_help
-      assert_match "--turn-index", hylo_extract_help
-      assert_match "--target-skill", hylo_extract_help
-      assert_match "--target-root", hylo_extract_help
-      assert_match "--output-root", hylo_extract_help
-      assert_match "--sealed-root", hylo_extract_help
-      assert_match "--seal-key-output-fd", hylo_extract_help
-    end
-
     token_help = shell_output("#{bin}/seq token-usage --help")
     assert_match "--tz", token_help
     assert_match "--last", token_help
@@ -191,22 +161,7 @@ class Seq < Formula
     assert_match "--policy-root", execution_policy_help
 
     actuation_audit_help = shell_output("#{bin}/seq actuation-audit --help")
-    assert_match "summary|runs|slices|proof|compactions|decisions|hylo|kernel|report", actuation_audit_help
-
-    hylo_fixture = testpath/"hylo-resolve.jsonl"
-    hylo_fixture.write <<~JSONL
-      {"type":"session_meta","timestamp":"2026-07-02T13:10:00Z","payload":{"id":"resolve_without_review_fold","cwd":"#{testpath}","model":"gpt-5","git":{"branch":"feature/hylo","commit_hash":"head-resolve-no-fold"}}}
-      {"type":"event_msg","timestamp":"2026-07-02T13:10:01Z","payload":{"type":"task_started","turn_id":"t1"}}
-      {"type":"event_msg","timestamp":"2026-07-02T13:10:02Z","payload":{"type":"user_message","turn_id":"t1","message":"$actuating resolve without review-fold fixture."}}
-      {"type":"event_msg","timestamp":"2026-07-02T13:10:03Z","payload":{"type":"agent_message","turn_id":"t1","message":"$cas review\\nreview finding: accepted liability\\nagent_loop_scheme_receipt:\\n  receipt_version: ALSR-v1\\nactuation_hylomorphism:\\n  machine_version: HYL-v1\\nhylo_step_receipt:\\n  receipt_version: HSR-v1\\n  unfold:\\n    produced: work_node\\n  action:\\n    effect: edit\\n  fold:\\n    verdict: complete\\n    current_artifact_bound: yes\\n  stop_rule:\\n    success: done\\nATCG-v1:\\n  can_mark_goal_complete: yes"}}
-      {"type":"response_item","timestamp":"2026-07-02T13:10:04Z","payload":{"type":"function_call","name":"apply_patch","call_id":"patch-1","arguments":"*** Begin Patch\\n*** Update File: resolve_no_fold.txt\\n+bad\\n*** End Patch"}}
-      {"type":"response_item","timestamp":"2026-07-02T13:10:05Z","payload":{"type":"function_call_output","call_id":"patch-1","output":"Success. Updated the following files:\\nM resolve_no_fold.txt\\n"}}
-      {"type":"event_msg","timestamp":"2026-07-02T13:10:06Z","payload":{"type":"task_complete","turn_id":"t1","duration_ms":5000}}
-    JSONL
-    hylo_audit = shell_output("#{bin}/seq actuation-audit --path #{hylo_fixture} --mode hylo --format json")
-    assert_match "\"resolve_without_review_fold\":1", hylo_audit
-    refute_match "review_fix_without_review_fold", hylo_audit
-    refute_match "ship_without_terminal_publication_boundary", hylo_audit
+    assert_match "summary|runs|slices|proof|compactions|decisions|kernel|report", actuation_audit_help
 
     session_dir = testpath/"sessions/2026/05/13"
     session_dir.mkpath
