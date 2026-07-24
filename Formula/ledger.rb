@@ -58,7 +58,7 @@ class Ledger < Formula
     assert_match "alias for export --format full", learning_show_help
     assert_match "Canonical learning id", learning_show_help
 
-    system "git", "init", "-q"
+    (testpath/".ledger/negative-ledger").mkpath
     negative_doctor = shell_output("#{bin}/ledger doctor --source negative-ledger")
     assert_match '"ok":true', negative_doctor
     assert_match '"records":0', negative_doctor
@@ -117,6 +117,7 @@ class Ledger < Formula
     assert_match "project", actuation_help
     assert_match "--review-contract FILE|-", actuation_help
 
+    system "git", "init", "-q"
     universalist_help = shell_output("#{bin}/ledger --source universalist --help")
     assert_match "Allocate, resolve, and emit receipts for Universalist plan artifacts", universalist_help
     assert_match "create", universalist_help
