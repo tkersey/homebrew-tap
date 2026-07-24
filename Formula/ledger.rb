@@ -58,6 +58,7 @@ class Ledger < Formula
     assert_match "alias for export --format full", learning_show_help
     assert_match "Canonical learning id", learning_show_help
 
+    system "git", "init", "-q"
     negative_doctor = shell_output("#{bin}/ledger doctor --source negative-ledger")
     assert_match '"ok":true', negative_doctor
     assert_match '"records":0', negative_doctor
@@ -123,7 +124,6 @@ class Ledger < Formula
     assert_match "path", universalist_help
     assert_match "emit", universalist_help
 
-    system "git", "init", "-q"
     actuation_doctor = shell_output(
       "#{bin}/ledger --source actuation --repo #{testpath} --goal tap-goal doctor",
     )
