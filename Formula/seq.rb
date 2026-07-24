@@ -20,7 +20,7 @@ class Seq < Formula
 
   test do
     version_output = shell_output("#{bin}/seq --version")
-    assert_match version.to_s, version_output
+    assert_equal version.to_s, version_output.strip
 
     help = shell_output("#{bin}/seq --help")
     assert_match "skills-rank", help
