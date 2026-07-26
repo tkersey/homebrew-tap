@@ -1,17 +1,17 @@
 class Seq < Formula
   desc "Zig CLI for mining Codex session and memory artifacts"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.5.3"
+  version "0.5.4"
   license "MIT"
 
   if OS.mac?
     depends_on arch: :arm64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-darwin-arm64.tar.gz"
-    sha256 "7e7dc4b1dcc22a2504fcaf460b1f95888158ec8bdaea4af8e8783ad71c05103a"
+    sha256 "01bc3ae15e5a9c0f1e7baf8234c0ed7ba68bdc893bc60bb210429e41d1816a2f"
   else
     depends_on arch: :x86_64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-linux-x86_64.tar.gz"
-    sha256 "642bfbcd503d52390f9e66b3ce29383a30f46e1e8745bbf2700055c1ebf32dcc"
+    sha256 "6737e72230d00120b95e0e0affdbee54e59b7f2f06b7ffeb5d71e41559bc16a5"
   end
 
   def install
@@ -53,6 +53,7 @@ class Seq < Formula
     assert_match "skill-contract", help
     assert_match "skill-decision-receipt", help
     assert_match "decision-capsule", help
+    assert_match "execution-policy-compile", help
     assert_match "execution-policy-audit", help
     assert_match "policy-calibration", help
     assert_match "find-session", help
@@ -81,6 +82,7 @@ class Seq < Formula
     assert_match "\"internal_context_not_success_v1\": true", capabilities
     assert_match "\"source_governance_projection_v1\": true", capabilities
     assert_match "\"c3_structured_closure_v1\": true", capabilities
+    assert_match "\"execution_policy_compiler_contract_v1\": true", capabilities
     assert_match "\"execution_policy_audit_v1\": true", capabilities
     assert_match "\"policy_transition_dataset_v1\": true", capabilities
 
@@ -159,6 +161,10 @@ class Seq < Formula
     execution_policy_help = shell_output("#{bin}/seq execution-policy-audit --help")
     assert_match "summary|runs|policies|transitions|calibration|regret|proof|report", execution_policy_help
     assert_match "--policy-root", execution_policy_help
+
+    execution_policy_compile_help = shell_output("#{bin}/seq execution-policy-compile --help")
+    assert_match "--file", execution_policy_compile_help
+    assert_match "--format json", execution_policy_compile_help
 
     actuation_audit_help = shell_output("#{bin}/seq actuation-audit --help")
     assert_match "summary|runs|slices|proof|compactions|decisions|kernel|report", actuation_audit_help
