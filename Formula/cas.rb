@@ -3,6 +3,8 @@ class Cas < Formula
   homepage "https://github.com/tkersey/skills-zig"
   version "0.3.4"
 
+  depends_on "tkersey/tap/ledger"
+
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-darwin-arm64.tar.gz"
     sha256 "2a693f270db087afda3d12c584bac89819bf1720991f7f2331bd1677163f11de"
