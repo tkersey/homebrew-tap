@@ -1,17 +1,17 @@
 class Seq < Formula
-  desc "Zig CLI for mining Codex session and memory artifacts"
+  desc "Native observation compiler for agent session evidence"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.5.4"
+  version "1.0.0"
   license "MIT"
 
   if OS.mac?
     depends_on arch: :arm64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-darwin-arm64.tar.gz"
-    sha256 "01bc3ae15e5a9c0f1e7baf8234c0ed7ba68bdc893bc60bb210429e41d1816a2f"
+    sha256 "a236cabe32334fa888fbae4456fd87b9ec8123ba4f016abf11f24649e6934667"
   else
     depends_on arch: :x86_64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-linux-x86_64.tar.gz"
-    sha256 "6737e72230d00120b95e0e0affdbee54e59b7f2f06b7ffeb5d71e41559bc16a5"
+    sha256 "4cae5649607173ead8cb9232060773e1ff7e274b78933cc728a378af1709d6f6"
   end
 
   def install
@@ -19,195 +19,50 @@ class Seq < Formula
   end
 
   test do
-    version_output = shell_output("#{bin}/seq --version")
-    assert_equal version.to_s, version_output.strip
+    assert_equal version.to_s, shell_output("#{bin}/seq --version").strip
 
-    help = shell_output("#{bin}/seq --help")
-    assert_match "skills-rank", help
-    assert_match "skill-success-rank", help
-    assert_match "skill-evidence", help
-    assert_match "skill-blocks", help
-    assert_match "artifact-search", help
-    assert_match "skill-audit", help
-    assert_match "tool-audit", help
-    assert_match "memory-inventory", help
-    assert_match "message-search", help
-    assert_match "workdir-report", help
-    assert_match "memory-provenance", help
-    assert_match "memory-map", help
-    assert_match "memory-history", help
-    assert_match "plan-search", help
-    assert_match "reply-latency", help
-    assert_match "workflow-audit", help
-    assert_match "message-audit", help
-    assert_match "skill-cohort", help
-    assert_match "tool-search", help
-    assert_match "memory-extension-audit", help
-    assert_match "token-window", help
-    assert_match "goal-audit", help
-    assert_match "adjudication-audit", help
-    assert_match "workflow-overlap", help
-    assert_match "resolve-churn-audit", help
-    assert_match "review-compiler-audit", help
-    assert_match "skill-decision-audit", help
-    assert_match "skill-contract", help
-    assert_match "skill-decision-receipt", help
-    assert_match "decision-capsule", help
-    assert_match "execution-policy-compile", help
-    assert_match "execution-policy-audit", help
-    assert_match "policy-calibration", help
-    assert_match "find-session", help
-    assert_match "dataset-schema", help
-    assert_match "query", help
-    capabilities = shell_output("#{bin}/seq capabilities --format json")
-    assert_match "\"streaming_session_scanner_v1\": true", capabilities
-    assert_match "\"actuation_artifact_kernel_audit_v1\": true", capabilities
-    assert_match "\"skill_contract_v1\": true", capabilities
-    assert_match "\"skill_decision_receipt_contract_binding_v1\": true", capabilities
-    assert_match "\"skill_contract_receipt_binding_projection_v1\": true", capabilities
-    assert_match "\"skill_decision_receipt_v1\": true", capabilities
-    assert_match "\"decision_capsule_v1\": true", capabilities
-    assert_match "\"decision_anchor_v1\": true", capabilities
-    assert_match "\"historical_decisions_dataset_v1\": true", capabilities
-    assert_match "\"dcp_validation_v1\": true", capabilities
-    assert_match "\"review_compiler_provenance_v1\": true", capabilities
-    assert_match "\"review_compiler_run_ledger_v1\": true", capabilities
-    assert_match "\"resolve_acceptance_contract_v2\": true", capabilities
-    assert_match "\"resolve_review_batch_v1\": true", capabilities
-    assert_match "\"resolve_review_aperture_v1\": true", capabilities
-    assert_match "\"resolve_counterexample_v1\": true", capabilities
-    assert_match "\"resolve_counterexample_basis_v2\": true", capabilities
-    assert_match "\"resolve_review_potential_v1\": true", capabilities
-    assert_match "\"resolve_intent_closed_audit_v1\": true", capabilities
-    assert_match "\"internal_context_not_success_v1\": true", capabilities
-    assert_match "\"source_governance_projection_v1\": true", capabilities
-    assert_match "\"c3_structured_closure_v1\": true", capabilities
-    assert_match "\"execution_policy_compiler_contract_v1\": true", capabilities
-    assert_match "\"execution_policy_audit_v1\": true", capabilities
-    assert_match "\"policy_transition_dataset_v1\": true", capabilities
+    capabilities = JSON.parse(shell_output("#{bin}/seq capabilities --format json"))
+    assert_equal "seq-capabilities/v1", capabilities.fetch("schema")
+    assert_includes capabilities.fetch("observation_abis"), "seq-observation-abi/v1"
+    assert_includes capabilities.fetch("source_adapters"), "immutable-relation-json/v1"
 
-    (testpath/"receipt-contract.json").write <<~JSON
-      {"skill_decision_contract":{"contract_version":"SKDC-v1","skill":{"name":"tap-skill","kind":"decision","source_fingerprint":"tap-v1"},"triggers":[{"trigger_id":"T1","description":"tap trigger","cue_literals":["tap"],"cue_regexes":[],"exclusions":[]}],"routes":[{"route_id":"R1","description":"tap route","aliases":[],"terminal":true}],"clauses":[{"clause_id":"C1","trigger_refs":["T1"],"expected_routes":["R1"],"prohibited_routes":[],"required_artifacts":["receipt"],"success_signals":[],"failure_signals":[],"rationale":"tap coverage"}],"instrumentation":{"decision_receipt":"required","rationale":"tap coverage"}}}
+    (testpath/"observation.json").write <<~JSON
+      {
+        "schema":"seq-observation-definition/v1",
+        "id":"tap/active-facts",
+        "requires":{"abi":"seq-observation-abi/v1","operators":["filter","project"]},
+        "parameters":{},"selectors":[],"relations":[],
+        "inputs":[{"name":"facts","schema":"tap-facts/v1","fields":[
+          {"name":"id","type":"string","nullable":false},
+          {"name":"active","type":"boolean","nullable":false}
+        ],"max_rows":2,"max_bytes":1024}],
+        "pipeline":[
+          {"op":"filter","input":"facts","as":"matched","where":[{"field":"active","op":"exact","value":true}]},
+          {"op":"project","input":"matched","as":"rows","fields":["id"]}
+        ],
+        "projections":{"rows":{"relation":"rows","schema":"tap-active/v1","fields":["id"],"renderers":["json"]}},
+        "bounds":{"max_rows":2,"max_output_bytes":1024,"max_fold_states":1,"max_input_bytes":1024}
+      }
     JSON
-    receipt_projection = shell_output(
-      "#{bin}/seq skill-contract validate --file #{testpath}/receipt-contract.json --format json",
+    (testpath/"facts.json").write <<~JSON
+      {"schema":"tap-facts/v1","rows":[{"id":"first","active":false},{"id":"second","active":true}]}
+    JSON
+
+    check_output = shell_output(
+      "#{bin}/seq definition check --definition #{testpath}/observation.json --format json",
     )
-    assert_match '"valid": true', receipt_projection
-    assert_match '"skill_kind": "decision"', receipt_projection
-    assert_match '"clause_routes": [{"clause_id": "C1"', receipt_projection
-    token_help = shell_output("#{bin}/seq token-usage --help")
-    assert_match "--tz", token_help
-    assert_match "--last", token_help
-    assert_match "--summary", token_help
-    assert_match "--audit", token_help
+    check = JSON.parse(check_output)
+    assert check.fetch("valid")
+    assert check.fetch("passive")
+    refute check.fetch("authority_granted")
 
-    token_cost_help = shell_output("#{bin}/seq token-cost --help")
-    assert_match "--pricing", token_cost_help
-    assert_match "--model", token_cost_help
-
-    skill_audit_help = shell_output("#{bin}/seq skill-audit --help")
-    assert_match "summary|mentions|trend|activation", skill_audit_help
-    assert_match "--exclude-current", skill_audit_help
-    assert_match "--last", skill_audit_help
-    assert_match "summary|sessions", shell_output("#{bin}/seq skill-success-rank --help")
-    skill_blocks_help = shell_output("#{bin}/seq skill-blocks --help")
-    assert_match "blocks|body|term-counts|term-summary", skill_blocks_help
-    assert_match "term-counts", skill_blocks_help
-    assert_match "term-summary", skill_blocks_help
-    assert_match "--term-group", skill_blocks_help
-    assert_match "summary|rows|args|unresolved", shell_output("#{bin}/seq tool-audit --help")
-    assert_match "categories|files|blocks|stage1|extensions", shell_output("#{bin}/seq memory-inventory --help")
-    assert_match "--contains-any", shell_output("#{bin}/seq message-search --help")
-    assert_match "summary|sessions", shell_output("#{bin}/seq workdir-report --help")
-    artifact_search_help = shell_output("#{bin}/seq artifact-search --help")
-    assert_match "--contains-any", artifact_search_help
-    assert_match "summary|rows|sessions", shell_output("#{bin}/seq message-audit --help")
-    skill_cohort_help = shell_output("#{bin}/seq skill-cohort --help")
-    assert_match "summary|cohort|mentions", skill_cohort_help
-    assert_match "--last", skill_cohort_help
-    tool_search_help = shell_output("#{bin}/seq tool-search --help")
-    assert_match "rows|summary|args", tool_search_help
-    assert_match "--path", tool_search_help
-    assert_match "--session-id", tool_search_help
-    assert_match "--contains-any", tool_search_help
-    assert_match "summary|rows", shell_output("#{bin}/seq memory-extension-audit --help")
-    assert_match "--window-hours", shell_output("#{bin}/seq token-window --help")
-    assert_match "review|resolve", shell_output("#{bin}/seq goal-audit --help")
-    workflow_audit_help = shell_output("#{bin}/seq workflow-audit --help")
-    assert_match "cohort-report", workflow_audit_help
-    assert_match "term-summary", workflow_audit_help
-    assert_match "--term-group", workflow_audit_help
-    assert_match "--last", workflow_audit_help
-    adjudication_help = shell_output("#{bin}/seq adjudication-audit --help")
-    assert_match "summary|rows|report", adjudication_help
-    assert_match "--include-root-equivalent", adjudication_help
-    assert_match "--bundle-dir", adjudication_help
-
-    resolve_churn_help = shell_output("#{bin}/seq resolve-churn-audit --help")
-    assert_match "--since", resolve_churn_help
-    assert_match "--until", resolve_churn_help
-    assert_match "--repo", resolve_churn_help
-    assert_match "markdown|json", resolve_churn_help
-
-    review_compiler_help = shell_output("#{bin}/seq review-compiler-audit --help")
-    assert_match "--since", review_compiler_help
-    assert_match "--until", review_compiler_help
-    assert_match "--repo", review_compiler_help
-    assert_match "--protocol", review_compiler_help
-    assert_match "c3-mrpc", review_compiler_help
-    assert_match "mbk", review_compiler_help
-    assert_match "table|json|jsonl|markdown", review_compiler_help
-
-    execution_policy_help = shell_output("#{bin}/seq execution-policy-audit --help")
-    assert_match "summary|runs|policies|transitions|calibration|regret|proof|report", execution_policy_help
-    assert_match "--policy-root", execution_policy_help
-
-    execution_policy_compile_help = shell_output("#{bin}/seq execution-policy-compile --help")
-    assert_match "--file", execution_policy_compile_help
-    assert_match "--format json", execution_policy_compile_help
-
-    actuation_audit_help = shell_output("#{bin}/seq actuation-audit --help")
-    assert_match "summary|runs|slices|proof|compactions|decisions|kernel|report", actuation_audit_help
-
-    session_dir = testpath/"sessions/2026/05/13"
-    session_dir.mkpath
-    (session_dir/"rollout-c3-orphan.jsonl").write <<~JSONL
-      {"type":"session_meta","timestamp":"2026-05-13T12:00:00Z","payload":{"id":"c3-orphan-closed","cwd":"#{testpath}","model":"gpt-5"}}
-      {"type":"event_msg","timestamp":"2026-05-13T12:00:01Z","payload":{"type":"agent_message","turn_id":"x1","message":"MRPC-v1 minimal_review_patch_certificate\\nclosed"}}
-    JSONL
-    review_compiler_audit = shell_output(
-      "#{bin}/seq review-compiler-audit " \
-      "--root #{testpath}/sessions --protocol c3 " \
-      "--since 2026-05-13T00:00:00Z --until 2026-05-14T00:00:00Z " \
-      "--repo #{testpath} --format json",
+    result_output = shell_output(
+      "#{bin}/seq observe --definition #{testpath}/observation.json " \
+      "--input facts=#{testpath}/facts.json --projection rows --format json",
     )
-    assert_match "\"included_sessions\"", review_compiler_audit
-    assert_match "\"reason\": \"no_c3_begin_signal\"", review_compiler_audit
-    assert_match "\"state\": \"declared_uncontrolled\"", review_compiler_audit
-    assert_match "\"c3_closed\": false", review_compiler_audit
-    assert_match "\"summary_state\": \"NONE\"", review_compiler_audit
-
-    decision_capsule_help = shell_output("#{bin}/seq decision-capsule --help")
-    assert_match "capsule|candidates|anchors|validate", decision_capsule_help
-    assert_match "--thread-id", decision_capsule_help
-    assert_match "--mode", decision_capsule_help
-    assert_match "--format", decision_capsule_help
-    assert_match "table|json|jsonl|csv|markdown", decision_capsule_help
-
-    decision_capsules_schema = shell_output(
-      "#{bin}/seq dataset-schema --dataset decision_capsules --format json",
-    )
-    assert_match "decision_capsules", decision_capsules_schema
-
-    historical_decisions_schema = shell_output(
-      "#{bin}/seq dataset-schema --dataset historical_decisions --format json",
-    )
-    assert_match "historical_decisions", historical_decisions_schema
-
-    execution_policy_schema = shell_output(
-      "#{bin}/seq dataset-schema --dataset execution_policy_transitions --format json",
-    )
-    assert_match "execution_policy_transitions", execution_policy_schema
-    assert_match "transition_audits", execution_policy_schema
+    result = JSON.parse(result_output)
+    assert_equal "seq-observation-result/v1", result.fetch("schema")
+    assert_equal [{ "id" => "second" }], result.dig("data", "rows")
+    refute result.fetch("authority_granted")
   end
 end
