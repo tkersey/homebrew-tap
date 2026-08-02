@@ -21,15 +21,17 @@ class Cas < Formula
 
   def install
     bin.install "cas"
-    bin.install "ledger"
     bin.install "cas_account"
     bin.install "cas-conformance-suite" => "cas_conformance_suite"
     bin.install "cas-goal" => "cas_goal"
     bin.install "cas-smoke-check" => "cas_smoke_check"
     bin.install "cas-instance-runner" => "cas_instance_runner"
     bin.install "cas-review-session" => "cas_review_session"
-    bin.install "cas-session-inquiry" => "cas_session_inquiry"
     bin.install "cas-perf-budget-governor"
+
+    libexec.install "ledger", "cas_session_inquiry"
+    bin.write_exec_script libexec/"cas_session_inquiry"
+    bin.install_symlink "cas_session_inquiry" => "cas-session-inquiry"
   end
 
   test do
@@ -38,7 +40,8 @@ class Cas < Formula
     assert_match "Subcommands:", cas_help
     assert_match "goal", cas_help
 
-    ledger_help = shell_output("#{bin}/ledger --help 2>&1")
+    refute_path_exists bin/"ledger"
+    ledger_help = shell_output("#{libexec}/ledger --help 2>&1")
     assert_match "Passive definitions for validation", ledger_help
     assert_match "ledger definition check", ledger_help
 
