@@ -1,16 +1,14 @@
 class Cas < Formula
   desc "Zig CLI helpers for Codex app-server orchestration"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.3.5"
-
-  depends_on "tkersey/tap/ledger"
+  version "0.3.9"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-darwin-arm64.tar.gz"
-    sha256 "7afbde7d55a746e788443e422c110d6c52e8b702db7d1d8361348abd906733ac"
+    sha256 "a09b118cb4f77d7b1ef1f0e4ee1213a394d1dd28a1b2bc6a16473919e6573544"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-linux-x86_64.tar.gz"
-    sha256 "6fe83eefa76851d13b2756c2d05ce0c0152482e7976d37c2a5b53f99a752f243"
+    sha256 "e9c2c7ae79f61f1b43cc49f50e3ba001ff309cf978a2607c86b5b1c189c3a343"
   end
 
   on_macos do
@@ -23,6 +21,7 @@ class Cas < Formula
 
   def install
     bin.install "cas"
+    bin.install "ledger"
     bin.install "cas_account"
     bin.install "cas-conformance-suite" => "cas_conformance_suite"
     bin.install "cas-goal" => "cas_goal"
@@ -38,6 +37,10 @@ class Cas < Formula
     assert_match "CAS dispatcher for subcommand-style usage", cas_help
     assert_match "Subcommands:", cas_help
     assert_match "goal", cas_help
+
+    ledger_help = shell_output("#{bin}/ledger --help 2>&1")
+    assert_match "Passive definitions for validation", ledger_help
+    assert_match "ledger definition check", ledger_help
 
     account_help = shell_output("#{bin}/cas_account --help 2>&1")
     assert_match "cas_account", account_help
