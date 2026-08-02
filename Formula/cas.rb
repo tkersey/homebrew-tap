@@ -1,14 +1,14 @@
 class Cas < Formula
   desc "Zig CLI helpers for Codex app-server orchestration"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.3.9"
+  version "0.3.10"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-darwin-arm64.tar.gz"
-    sha256 "a09b118cb4f77d7b1ef1f0e4ee1213a394d1dd28a1b2bc6a16473919e6573544"
+    sha256 "7c8d5314416ac2f583f8d0cf0a8e4262af3e22053c1fda71df64c378e41418c5"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-linux-x86_64.tar.gz"
-    sha256 "e9c2c7ae79f61f1b43cc49f50e3ba001ff309cf978a2607c86b5b1c189c3a343"
+    sha256 "37027d2d8bf5397356c73394068976cf2ccef5526fc68d337d080fcfa91eaf6c"
   end
 
   on_macos do
@@ -27,11 +27,8 @@ class Cas < Formula
     bin.install "cas-smoke-check" => "cas_smoke_check"
     bin.install "cas-instance-runner" => "cas_instance_runner"
     bin.install "cas-review-session" => "cas_review_session"
+    bin.install "cas-session-inquiry" => "cas_session_inquiry"
     bin.install "cas-perf-budget-governor"
-
-    libexec.install "ledger", "cas_session_inquiry"
-    bin.write_exec_script libexec/"cas_session_inquiry"
-    bin.install_symlink "cas_session_inquiry" => "cas-session-inquiry"
   end
 
   test do
@@ -41,9 +38,7 @@ class Cas < Formula
     assert_match "goal", cas_help
 
     refute_path_exists bin/"ledger"
-    ledger_help = shell_output("#{libexec}/ledger --help 2>&1")
-    assert_match "Passive definitions for validation", ledger_help
-    assert_match "ledger definition check", ledger_help
+    refute_path_exists libexec/"ledger"
 
     account_help = shell_output("#{bin}/cas_account --help 2>&1")
     assert_match "cas_account", account_help
