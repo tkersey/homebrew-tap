@@ -1,17 +1,17 @@
 class Seq < Formula
   desc "Native observation compiler for agent session evidence"
   homepage "https://github.com/tkersey/skills-zig"
-  version "1.0.2"
+  version "1.1.0"
   license "MIT"
 
   if OS.mac?
     depends_on arch: :arm64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-darwin-arm64.tar.gz"
-    sha256 "d568f6f2b2f544a48d842751db528053203e15337537d24b09d219766283dc34"
+    sha256 "32f134b8fb00398740e7418a5dc55e18d570b59dceeaa8e091b96deca2128cb9"
   else
     depends_on arch: :x86_64
     url "https://github.com/tkersey/skills-zig/releases/download/seq-v#{version}/seq-v#{version}-linux-x86_64.tar.gz"
-    sha256 "0ccd12b51f9034f301cbadd6942f2ec7f43fcfe5ba2dc711103af61c0d78a3ba"
+    sha256 "2565b56913150dc05ca0365a9adb74099f86111f8e0f336e45f8ffe0abd62446"
   end
 
   def install
