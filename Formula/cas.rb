@@ -1,14 +1,14 @@
 class Cas < Formula
-  desc "Zig CLI helpers for Codex app-server orchestration"
+  desc "Local Codex control-plane CLI"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.3.13"
+  version "0.4.1"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-darwin-arm64.tar.gz"
-    sha256 "cb4414a640c87a23f103cb2e52229e3aba24ba3bb0bd115908d8fa8471f6ab27"
+    sha256 "72a7739e5210de2b52fc4f7bcdbb92996a391394720d96874f782740659d7b2c"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-linux-x86_64.tar.gz"
-    sha256 "ea95f5382335f4a4871d09c1a35a1b16a1d5b1f0b981729f666ea7377b2a6576"
+    sha256 "98341b386d8d88097162afc27af769a6bb568425c78cb67999b9120f8bb436c2"
   end
 
   on_macos do
@@ -22,6 +22,8 @@ class Cas < Formula
   def install
     bin.install "cas"
     bin.install "cas_account"
+    bin.install "cas_app_server_preflight"
+    bin.install "cas_automation"
     bin.install "cas-conformance-suite" => "cas_conformance_suite"
     bin.install "cas-goal" => "cas_goal"
     bin.install "cas-smoke-check" => "cas_smoke_check"
@@ -39,6 +41,18 @@ class Cas < Formula
 
     refute_path_exists bin/"ledger"
     refute_path_exists libexec/"ledger"
+    refute_path_exists bin/"cron"
+    refute_path_exists bin/"cas_trial"
+
+    app_server_version = shell_output("#{bin}/cas_app_server_preflight --version 2>&1")
+    assert_match version.to_s, app_server_version
+    automation_version = shell_output("#{bin}/cas_automation --version 2>&1")
+    assert_equal "#{version}\n", automation_version
+
+    app_server_help = shell_output("#{bin}/cas app-server --help 2>&1")
+    assert_match "schema|preflight", app_server_help
+    automation_help = shell_output("#{bin}/cas automation --help 2>&1")
+    assert_match "Manage Codex automations", automation_help
 
     account_help = shell_output("#{bin}/cas_account --help 2>&1")
     assert_match "cas_account", account_help
@@ -75,7 +89,8 @@ class Cas < Formula
     capabilities = shell_output("#{bin}/cas capabilities --json")
     assert_match "\"cas_rer_opaque_request_binding_v1\": true", capabilities
     assert_match "\"cas_review_scoped_instructions_v1\": true", capabilities
-    assert_match "\"cas_codex_0145_structured_review_v4\": true", capabilities
+    assert_match "\"cas_app_server_contract_0146_v1\": true", capabilities
+    assert_match "\"cas_automation_v1\": true", capabilities
 
     inquiry_help = shell_output("#{bin}/cas_session_inquiry --help 2>&1")
     assert_match "cas_session_inquiry", inquiry_help
