@@ -89,7 +89,7 @@ class Cas < Formula
     capabilities = shell_output("#{bin}/cas capabilities --json")
     assert_match "\"cas_rer_opaque_request_binding_v1\": true", capabilities
     assert_match "\"cas_review_scoped_instructions_v1\": true", capabilities
-    assert_match "\"cas_app_server_contract_0146_v1\": true", capabilities
+    assert_match "\"cas_app_server_contract_v1\": true", capabilities
     assert_match "\"cas_automation_v1\": true", capabilities
 
     inquiry_help = shell_output("#{bin}/cas_session_inquiry --help 2>&1")
