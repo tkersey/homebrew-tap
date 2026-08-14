@@ -1,14 +1,14 @@
 class Cas < Formula
   desc "Local Codex control-plane CLI"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.5.1"
+  version "0.5.2"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-darwin-arm64.tar.gz"
-    sha256 "4c74aba3c2c3bd18c31c04dc793e1742f1a5f6ee01f3a910ea6fabd179ca0831"
+    sha256 "e701d86ac0b2fba5ffbb4cd3f437d9459fa1f3213669b9634301b81e5404cbb9"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-linux-x86_64.tar.gz"
-    sha256 "91023f6477bb50e73305b48136761eab69ed1f1455de4d01711976f840406d25"
+    sha256 "0a7c01c65649924c31a27e921ee37bd9723120255eca0201fce2bc4cd8e8cc2b"
   end
 
   on_macos do
