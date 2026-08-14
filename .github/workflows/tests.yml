@@ -41,10 +41,18 @@ jobs:
       - name: Reject skipped or failed formulae
         if: always() && github.event_name == 'pull_request'
         env:
+          ALLOWED_SKIPPED_FORMULAE: ${{ runner.os == 'Linux' && 'tkersey/tap/synoptic' || '' }}
           SKIPPED_OR_FAILED_FORMULAE: ${{ steps.formulae.outputs.skipped_or_failed_formulae }}
         run: |
-          if [ -n "${SKIPPED_OR_FAILED_FORMULAE}" ]; then
-            echo "::error::Skipped or failed formulae: ${SKIPPED_OR_FAILED_FORMULAE}"
+          unexpected=''
+          for formula in ${SKIPPED_OR_FAILED_FORMULAE}; do
+            case " ${ALLOWED_SKIPPED_FORMULAE} " in
+              *" ${formula} "*) ;;
+              *) unexpected="${unexpected} ${formula}" ;;
+            esac
+          done
+          if [ -n "${unexpected}" ]; then
+            echo "::error::Unexpected skipped or failed formulae:${unexpected}"
             exit 1
           fi
 

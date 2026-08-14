@@ -19,7 +19,7 @@ class Synoptic < Formula
   end
 
   test do
-    assert_equal version.to_s, shell_output("#{bin}/synoptic --version").strip
+    assert_equal "synoptic #{version}", shell_output("#{bin}/synoptic --version").strip
 
     capabilities = JSON.parse(shell_output("#{bin}/synoptic capabilities --format json"))
     synoptic = capabilities.fetch("synopticCapabilities")
