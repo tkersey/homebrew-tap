@@ -41,7 +41,7 @@ jobs:
       - name: Reject skipped or failed formulae
         if: always() && github.event_name == 'pull_request'
         env:
-          ALLOWED_SKIPPED_FORMULAE: ${{ runner.os == 'Linux' && 'tkersey/tap/synoptic' || '' }}
+          ALLOWED_SKIPPED_FORMULAE: ''
           SKIPPED_OR_FAILED_FORMULAE: ${{ steps.formulae.outputs.skipped_or_failed_formulae }}
         run: |
           unexpected=''
