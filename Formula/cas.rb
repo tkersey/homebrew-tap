@@ -1,14 +1,14 @@
 class Cas < Formula
   desc "Local Codex control-plane CLI"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.5.2"
+  version "0.6.0"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-darwin-arm64.tar.gz"
-    sha256 "e701d86ac0b2fba5ffbb4cd3f437d9459fa1f3213669b9634301b81e5404cbb9"
+    sha256 "b1d96a8aebaeafd3382ab1f4c060196ea07e79ee8bd69ecdeb5801d40d9c9c85"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-linux-x86_64.tar.gz"
-    sha256 "0a7c01c65649924c31a27e921ee37bd9723120255eca0201fce2bc4cd8e8cc2b"
+    sha256 "2930e0d94505b1c9b9abc8f352ef45c02df2aa4c7683ab410f30b25bfd8699b1"
   end
 
   on_macos do
@@ -43,6 +43,7 @@ class Cas < Formula
     refute_path_exists libexec/"ledger"
     refute_path_exists bin/"cron"
     refute_path_exists bin/"cas_trial"
+    refute_path_exists bin/"synoptic"
 
     app_server_version = shell_output("#{bin}/cas_app_server_preflight --version 2>&1")
     assert_match version.to_s, app_server_version
@@ -89,7 +90,10 @@ class Cas < Formula
     capabilities = shell_output("#{bin}/cas capabilities --json")
     assert_match "\"cas_rer_opaque_request_binding_v1\": true", capabilities
     assert_match "\"cas_review_scoped_instructions_v1\": true", capabilities
-    assert_match "\"cas_app_server_contract_v1\": true", capabilities
+    assert_match "\"cas_app_server_contract_v2\": true", capabilities
+    assert_match "\"cas_app_server_stateful_session_v1\": true", capabilities
+    assert_match "\"cas_app_server_daemon_v1\": true", capabilities
+    assert_match "\"cas_app_server_grpc_code_mode_host_v1\": true", capabilities
     assert_match "\"cas_automation_v1\": true", capabilities
 
     inquiry_help = shell_output("#{bin}/cas_session_inquiry --help 2>&1")
