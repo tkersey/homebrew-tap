@@ -1,14 +1,14 @@
 class Cas < Formula
   desc "Local Codex control-plane CLI"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.6.2"
+  version "0.6.3"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-darwin-arm64.tar.gz"
-    sha256 "f3a57b3e7f6d3bdb2c6e7d3aa2976b0c12f15b29d164f4060d666ee554780005"
+    sha256 "2208b7b35fb81347557252d3915b628a93537d9c5f58e6e95312cf4b3f81b42d"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-linux-x86_64.tar.gz"
-    sha256 "a4b80e7d2b5fe60a1953696335de389a830b568c657c955c65546cc449e3f2f3"
+    sha256 "e6a2044fee640c1291222431e7e04818a70367331c97c070eaf322c2909f8199"
   end
 
   on_macos do
@@ -62,6 +62,13 @@ class Cas < Formula
     conformance_help = shell_output("#{bin}/cas_conformance_suite --help 2>&1")
     assert_match "cas_conformance_suite", conformance_help
     assert_match "Usage:", conformance_help
+    conformance = shell_output(
+      "#{bin}/cas conformance --cwd #{testpath} --scenario overload_backoff " \
+      "--skip-smoke-check --backoff-base-ms 1 --max-retries 2 --json",
+    )
+    assert_match '"ok": true', conformance
+    assert_match '"attempts": 3', conformance
+    assert_match '"retries": 2', conformance
 
     goal_help = shell_output("#{bin}/cas_goal --help 2>&1")
     assert_match "cas_goal", goal_help
