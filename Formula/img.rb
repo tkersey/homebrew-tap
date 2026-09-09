@@ -1,14 +1,14 @@
 class Img < Formula
   desc "Render UTF-8 text and code as dense PNG pages"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.1.1"
+  version "0.1.2"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/img-v#{version}/img-v#{version}-darwin-arm64.tar.gz"
-    sha256 "ecad94bf0559672eab9e1835ec6173cf125881d0ac0f386ec99360bcdd64cb34"
+    sha256 "94a8ac012309e51df76b37bd915b315fbb1e2c9ff616f3f71fe88d626df84e78"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/img-v#{version}/img-v#{version}-linux-x86_64.tar.gz"
-    sha256 "9f73055c7307ef639ad207f6157793d4036267234b45dc8631cd7b3c7d4ff8c4"
+    sha256 "2c605eb941db0ad261e74119c2e02e4e2e5ffbd0f2f78ab74fd0d64ba95c62a7"
   end
 
   on_macos do
