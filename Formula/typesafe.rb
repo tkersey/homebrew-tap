@@ -1,16 +1,17 @@
 class Typesafe < Formula
   desc "Document review triage with the TypeSafe API"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.1.0"
+  version "0.2.0"
 
   if OS.mac?
     depends_on arch: :arm64
+    depends_on macos: :sequoia
     url "https://github.com/tkersey/skills-zig/releases/download/typesafe-v#{version}/typesafe-v#{version}-darwin-arm64.tar.gz"
-    sha256 "3a1e7bafb6ebad461d0adc2e73aae07e9bb5ab1d907d8258677dc3f2e209a8f2"
+    sha256 "84fe2c7f0999220b8faf6c135226c7c65358b90eec729998f11780e9d41189d0"
   else
     depends_on arch: :x86_64
     url "https://github.com/tkersey/skills-zig/releases/download/typesafe-v#{version}/typesafe-v#{version}-linux-x86_64.tar.gz"
-    sha256 "2389ff8632e1d1249ed7bb288863db97e9ff0e290fa1328b9fc362d32c4da2e2"
+    sha256 "7c713c774d2a7dac1ea4b06fff28309e47bfaa43b2d39fdf48ef2c9bbebbed3e"
   end
 
   def install
