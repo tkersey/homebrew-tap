@@ -1,14 +1,14 @@
 class Cas < Formula
   desc "Local Codex control-plane CLI"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.7.2"
+  version "0.8.0"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-darwin-arm64.tar.gz"
-    sha256 "f485d396da3c39a3e11a47cc69996fc0574b519769a46b7fa58b0de48acf7d4d"
+    sha256 "fd983a7efbfed809d143d2b73a453ab4d6d1df6ea2895353b98c3ce24ab77876"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/cas-v#{version}/cas-v#{version}-linux-x86_64.tar.gz"
-    sha256 "3ccc53ecbf2d3226ae65d7b6ab5091847caa78111227bc2524c95e5ff4e5a8f7"
+    sha256 "b1170cd3cb0cbbc17f7966bf810ae60c58cd97c6e5bcec7f0e2c8799cdd78d8d"
   end
 
   on_macos do
@@ -31,7 +31,6 @@ class Cas < Formula
     bin.install "cas-instance-runner" => "cas_instance_runner"
     bin.install "cas-review-session" => "cas_review_session"
     bin.install "cas-session-inquiry" => "cas_session_inquiry"
-    bin.install "cas-perf-budget-governor"
   end
 
   test do
@@ -107,8 +106,5 @@ class Cas < Formula
     inquiry_help = shell_output("#{bin}/cas_session_inquiry --help 2>&1")
     assert_match "cas_session_inquiry", inquiry_help
     assert_match "session_inquiry", shell_output("#{bin}/cas --help 2>&1")
-
-    perf_help = shell_output("#{bin}/cas-perf-budget-governor --help 2>&1")
-    assert_match "Performance harness for budget_governor", perf_help
   end
 end

@@ -1,29 +1,41 @@
 class Lift < Formula
-  desc "Zig CLI helpers for performance measurement workflows"
+  desc "Benchmark sample statistics and comparisons"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.3.1"
+  version "0.4.0"
 
   if OS.mac?
     depends_on arch: :arm64
     depends_on macos: :sequoia
     url "https://github.com/tkersey/skills-zig/releases/download/lift-v#{version}/lift-v#{version}-darwin-arm64.tar.gz"
-    sha256 "4bb7d70ff874b9e64f5ac1e460a67dc70a8add4ef2debfb3ce405e28befbe448"
+    sha256 "0031a2909a3fa6fc7c0c74222beab5a3e0cb9c43d5bc566e4710b63580b912a5"
   else
     depends_on arch: :x86_64
     url "https://github.com/tkersey/skills-zig/releases/download/lift-v#{version}/lift-v#{version}-linux-x86_64.tar.gz"
-    sha256 "03e51f3da1df734ae161d93ab6917892407ea440869d6dc076ade889d697804e"
+    sha256 "d60335bdc2e8b3c92d088f985545461d7acf491e5dba2bebc01c21d3cc5bcdbd"
   end
 
   def install
     bin.install "lift-bench-stats" => "bench_stats"
-    bin.install "lift-perf-report" => "perf_report"
-    bin.install "lift-perf-bench-stats"
   end
 
   test do
+    assert_equal version.to_s, shell_output("#{bin}/bench_stats --version").strip
     assert_match "Summarize benchmark samples", shell_output("#{bin}/bench_stats --help 2>&1")
-    assert_match "Generate a performance report template", shell_output("#{bin}/perf_report --help 2>&1")
-    perf_help = shell_output("#{bin}/lift-perf-bench-stats --help 2>&1")
-    assert_match "Performance harness for bench_stats parser", perf_help
+
+    (testpath/"baseline.txt").write "1\n2\n3\n4\n5\n"
+    (testpath/"variant.txt").write "2\n3\n4\n5\n6\n"
+    summary = JSON.parse(shell_output("#{bin}/bench_stats --input #{testpath}/baseline.txt --unit ms --json"))
+    assert_equal 5, summary.fetch("count")
+    assert_equal 3.0, summary.fetch("mean")
+    assert_equal 3.0, summary.fetch("p50")
+    assert_equal "ms", summary.fetch("unit")
+
+    comparison = JSON.parse(shell_output(
+                              "#{bin}/bench_stats --input #{testpath}/baseline.txt " \
+                              "--compare #{testpath}/variant.txt --seed 42 --json",
+                            ))
+    assert_equal 3.0, comparison.fetch("baseline").fetch("mean")
+    assert_equal 4.0, comparison.fetch("variant").fetch("mean")
+    assert_equal 1.0, comparison.fetch("delta").fetch("mean")
   end
 end
