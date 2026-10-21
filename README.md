@@ -9,10 +9,14 @@ Install a formula with `brew install tkersey/tap/<formula>`.
 | `cas` | `cas`, `cas_account`, `cas_app_server_preflight`, `cas_automation`, `cas_conformance_suite`, `cas_goal`, `cas_smoke_check`, `cas_instance_runner`, `cas_review_session`, `cas_session_inquiry` | 10 |
 | `ledger` | `ledger` | 1 |
 | `memory-note` | `memory-note` | 1 |
+| `siwc` | `siwc` | 1 |
 
-These five packages expose 14 executable names. Release archives come from
+These six packages expose 15 executable names. Release archives come from
 [Skills-Zig](https://github.com/tkersey/skills-zig/releases), with pinned hashes
 for macOS ARM64 (macOS 15 or later) and Linux x86-64.
+
+Install SIWC with `brew install tkersey/tap/siwc`. Its formula tests run offline;
+a real ChatGPT account is not required for installation or package validation.
 
 ## Migration
 
