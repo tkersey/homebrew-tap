@@ -1,17 +1,17 @@
 class Lift < Formula
   desc "Benchmark sample statistics and comparisons"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.4.1"
+  version "0.4.2"
 
   if OS.mac?
     depends_on arch: :arm64
     depends_on macos: :sequoia
     url "https://github.com/tkersey/skills-zig/releases/download/lift-v#{version}/lift-v#{version}-darwin-arm64.tar.gz"
-    sha256 "7de003abc595d493b6305000ec8d4499afab25f09e767358f7d58066c59735d8"
+    sha256 "888461cf4d4b6e59f815e4ba644eb5cde63a39283489b6e8885f21c3dfe87b21"
   else
     depends_on arch: :x86_64
     url "https://github.com/tkersey/skills-zig/releases/download/lift-v#{version}/lift-v#{version}-linux-x86_64.tar.gz"
-    sha256 "1a499e7d4207ba8d4a266a6706b954c9e14a67679bd24f9da19bf7f9c66db70e"
+    sha256 "8b94999e3c464135acf844cafbca2fef56e62c8c12043776f9c67b6c69c2a85c"
   end
 
   def install

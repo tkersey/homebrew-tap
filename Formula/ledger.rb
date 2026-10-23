@@ -1,15 +1,15 @@
 class Ledger < Formula
   desc "Native artifact validation and durable protocol runtime"
   homepage "https://github.com/tkersey/skills-zig"
-  version "1.5.4"
+  version "1.5.5"
   license "MIT"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-darwin-arm64.tar.gz"
-    sha256 "9dcec4cad9654c604a7a039e04fa7b5863abe4744c77b9a78057d13a5363e86f"
+    sha256 "70289d78c3389f158384f0d0bcbc376d35c7723d8d29eaf7ff43bd4da73e322d"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/ledger-v#{version}/ledger-v#{version}-linux-x86_64.tar.gz"
-    sha256 "dec83eb2213b3d53c0f3d3399e90d62de11f5392fec91236734bbfbd6977338e"
+    sha256 "43d10161cf541807687ccdb90e344b8573f00dc9513d8c111f44648ee4d783e8"
   end
 
   on_macos do
