@@ -1,14 +1,14 @@
 class Siwc < Formula
   desc "Native Sign in with ChatGPT credential manager"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.1.2"
+  version "0.1.3"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/siwc-v#{version}/siwc-v#{version}-darwin-arm64.tar.gz"
-    sha256 "29ab123b106d6d7f8eed749bb46accb23a4808aed5f051eb78fe2ade55238222"
+    sha256 "a115948682ce1f94760820afd7382f20ffd1592828af2699169a0d6f9208de8f"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/siwc-v#{version}/siwc-v#{version}-linux-x86_64.tar.gz"
-    sha256 "66560f71bc51f96343a7d7f485487b8721d48a803d1a08a01b25304989ab7946"
+    sha256 "6b4f9dca98d652952c78f23793fd495d532718f1b31d4d7cd7d8e32071f3bc87"
   end
 
   on_macos do
