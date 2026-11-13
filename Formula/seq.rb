@@ -42,7 +42,7 @@ class Seq < Formula
           {"op":"project","input":"matched","as":"rows","fields":["id"]}
         ],
         "projections":{"rows":{"relation":"rows","schema":"tap-active/v1","fields":["id"],"renderers":["json"]}},
-        "bounds":{"max_rows":2,"max_output_bytes":1024,"max_fold_states":1,"max_input_bytes":1024}
+        "bounds":{"max_rows":2,"max_output_bytes":4096,"max_fold_states":1,"max_input_bytes":1024}
       }
     JSON
     (testpath/"facts.json").write <<~JSON
@@ -62,7 +62,7 @@ class Seq < Formula
       "--input facts=#{testpath}/facts.json --projection rows --format json",
     )
     result = JSON.parse(result_output)
-    assert_equal "seq-observation-result/v1", result.fetch("schema")
+    assert_equal "seq-observation-result/v2", result.fetch("schema")
     assert_equal [{ "id" => "second" }], result.dig("data", "rows")
     refute result.fetch("authority_granted")
   end
