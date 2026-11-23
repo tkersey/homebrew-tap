@@ -9,13 +9,18 @@ Install a formula with `brew install tkersey/tap/<formula>`.
 | `ledger` | `ledger` | 1 |
 | `memory-note` | `memory-note` | 1 |
 | `siwc` | `siwc` | 1 |
+| `assay` | `assay` | 1 |
 
-These five packages expose five executable names. Release archives come from
+These six packages expose six executable names. Release archives come from
 [Skills-Zig](https://github.com/tkersey/skills-zig/releases), with pinned hashes
 for macOS ARM64 (macOS 15 or later) and Linux x86-64.
 
 Install SIWC with `brew install tkersey/tap/siwc`. Its formula tests run offline;
 a real ChatGPT account is not required for installation or package validation.
+
+Install Assay with `brew install tkersey/tap/assay`. It is a passive assessment
+kernel: it reads local documents, runs no evaluator, uses no network, and grants
+no authority. Its formula test runs a real offline assessment and receipt check.
 
 ## CAS retirement
 
