@@ -57,18 +57,18 @@ class Assay < Formula
         basis: "empirical", evaluator_id: "observer/v1",
         decisive_when: { supported: "complete_run", refuted: "observation" },
         check: { kind: "scalar_equal", expected: nil }
-      }],
+      }]
     )
     (testpath/"evidence.json").write JSON.generate(
-      schema: "assay-evidence/v1",
+      schema:          "assay-evidence/v1",
       contract_sha256: Digest::SHA256.hexdigest((testpath/"contract.json").binread),
-      subject_sha256: Digest::SHA256.hexdigest((testpath/"subject.json").binread),
-      context_sha256: artifacts[1][:sha256],
-      runs: [{ id: "run", evaluator_id: "observer/v1", evaluator_sha256: artifacts[2][:sha256],
+      subject_sha256:  Digest::SHA256.hexdigest((testpath/"subject.json").binread),
+      context_sha256:  artifacts[1][:sha256],
+      runs:            [{ id: "run", evaluator_id: "observer/v1", evaluator_sha256: artifacts[2][:sha256],
                outcome: "interrupted", reason: "Interrupted after recording." }],
-      records: [{ obligation_id: "null-case", run_id: "run", status: "observed",
+      records:         [{ obligation_id: "null-case", run_id: "run", status: "observed",
                   observation: { kind: "scalar", value: 7 }, artifact_ids: [] }],
-      artifacts: [],
+      artifacts:       [],
     )
     receipt = shell_output(
       "#{bin}/assay assess --contract #{testpath}/contract.json --subject #{testpath}/subject.json " \
