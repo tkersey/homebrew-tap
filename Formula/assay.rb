@@ -1,14 +1,14 @@
 class Assay < Formula
   desc "Passive assessment kernel for contract, subject, and evidence documents"
   homepage "https://github.com/tkersey/skills-zig"
-  version "0.1.0"
+  version "0.2.0"
 
   if OS.mac?
     url "https://github.com/tkersey/skills-zig/releases/download/assay-v#{version}/assay-v#{version}-darwin-arm64.tar.gz"
-    sha256 "9c08bd285d3634e5255f03991f8431a52326c2c2e59dfa540f45042e9d55a0f3"
+    sha256 "c920cbbf407fc2c56e143618c99c0f39ceffe6e1733a0ebc0bcc3585da647aa3"
   else
     url "https://github.com/tkersey/skills-zig/releases/download/assay-v#{version}/assay-v#{version}-linux-x86_64.tar.gz"
-    sha256 "ecf500b08cebaccf3c8921cceec80e31f9f51cdab9aaf51ad40b410771489899"
+    sha256 "93223780310147f5fbd9a968966d48c95eeecfde798ba04f52c4c4d11a05a2be"
   end
 
   on_macos do
